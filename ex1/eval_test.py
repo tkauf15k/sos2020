@@ -2,8 +2,9 @@ from Bio import SeqIO
 import numpy as np
 from itertools import tee
 import IUBAmbiguities
+import timeit
 
-num_sequences = 10  # 20 50 100
+num_sequences = 100  # 20 50 100
 input_path = "data/human_data_{}.fasta".format(num_sequences)
 
 with open(input_path, "r") as input_handle:
@@ -15,6 +16,8 @@ data = np.array(sequences, dtype=np.int)
 
 snvr_indices = np.where((np.max(data, axis=0) - np.min(data, axis=0)) != 0)[0]
 snvrs = data[:, snvr_indices]
+
+sequence_length = snvrs.shape[1]
 
 _cache = {}
 
@@ -60,7 +63,7 @@ def gen_cost(x, y, _cache, levels, hierarchy):
         return _cache[(first, second)]
 
     if first == second:
-        return 0
+        return first, 0
 
     generalizer = find_gen(first, second, levels, hierarchy)
     cost = 2 * levels[generalizer] - levels[first] - levels[second]
@@ -69,10 +72,27 @@ def gen_cost(x, y, _cache, levels, hierarchy):
 
     return generalizer, cost
 
-
-alphabet = ['A', 'C', 'G', 'T', 'R', 'Y', 'S', 'W', 'M', 'K', 'B', 'D', 'H', 'V', '-', 'N']
-
 # fill caches of all pairs
-for v, w in [(a, b) for a in alphabet for b in alphabet if ord(a) < ord(b)]:
+for v, w in [(a, b) for a in IUBAmbiguities._alphabet for b in IUBAmbiguities._alphabet if ord(a) < ord(b)]:
     gen, cost = gen_cost(ord(v), ord(w), _cache, IUBAmbiguities._levels, IUBAmbiguities._hierarchy)
-    print('{} : {} => {}, {}'.format(v, w, chr(gen), cost))
+    # print('{} : {} => {}, {}'.format(v, w, chr(gen), cost))
+
+assert num_sequences == snvrs.shape[0]
+
+cost_matrix = np.zeros(shape=(num_sequences, num_sequences), dtype=int)
+
+start = timeit.default_timer()
+
+for a, b in [(a, b) for a in range(0, num_sequences) for b in range(0, num_sequences) if a < b]:
+    def gen_cost_vect(a, b):
+        _, cost = gen_cost(a, b, _cache, IUBAmbiguities._levels, IUBAmbiguities._hierarchy)
+        return cost
+
+
+    gen_cost_vect_func = np.vectorize(gen_cost_vect)
+    sum = np.sum(gen_cost_vect_func(snvrs[a, :], snvrs[b, :]))
+    cost_matrix[a, b] = cost_matrix[b, a] = sum
+
+end = timeit.default_timer()
+print("just some arbitrary output: {}".format(np.average(cost_matrix)))
+print("preparation of costmatrix required: {} s".format(end - start))

@@ -1,3 +1,5 @@
+_alphabet = ['A', 'C', 'G', 'T', 'R', 'Y', 'S', 'W', 'M', 'K', 'B', 'D', 'H', 'V', '-', 'N']
+
 _hierarchy = {
     ord('A'): {ord('R'), ord('W'), ord('M')},
     ord('C'): {ord('Y'), ord('S'), ord('M')},
