@@ -2,8 +2,8 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-min_length = 100
-genome_count = 10000
+min_length = 1000
+genome_count = 500
 
 input_path = "human_data.txt"
 output_path = "human_data.fasta"
