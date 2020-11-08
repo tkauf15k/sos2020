@@ -8,6 +8,8 @@ from operator import itemgetter
 from typing import Set, List, Tuple
 import random
 
+from data.ExactWeightedMatching import ExactWeightedMatching
+
 num_sequences = 20  # 20 50 100
 input_path = "data/human_data_{}.fasta".format(num_sequences)
 
@@ -65,6 +67,9 @@ def preprocess(input_path: str):
 
     sequences: List[List[int]] = [[ord(c) for c in list(str(a.seq))] for a in sequences]
 
+    #for idx,dashes in sorted([(idx, len(np.where(np.array(s) == ord('-'))[0])) for idx, s in enumerate(sequences)],key=itemgetter(1)):
+    #    print("{} --> {}".format(idx, dashes))
+
     data: np.array = np.array(sequences, dtype=np.int)
 
     snvr_indices = np.where((np.max(data, axis=0) - np.min(data, axis=0)) != 0)[0]
@@ -91,7 +96,7 @@ def preprocess(input_path: str):
         cost_matrix[a, b] = cost_matrix[b, a] = sum_cost
 
     end = timeit.default_timer()
-    
+
     # print("just some arbitrary output: {}".format(np.average(cost_matrix)))
     print("preparation of costmatrix required: {} s".format(end - start))
 
@@ -101,7 +106,7 @@ def DNALA(num_sequences: int, cost_matrix: np.ndarray):
     def get_min_indizes(cost_matrix: np.ndarray, i: int, S: Set[int]) -> Set[int]:
         row = cost_matrix[i, :]
         possible_ind = S.difference({i})
-        
+
         mn = np.amin(np.take(row, list(possible_ind)))
         ind = np.where(row == mn)[0]
         return set(ind).intersection(possible_ind)
@@ -140,7 +145,12 @@ def random_pairing(num_sequences: int):
 if __name__ == "__main__":
     cost_matrix = preprocess(input_path)
     pairing = DNALA(num_sequences, cost_matrix)
+    exact_pairing = ExactWeightedMatching(num_sequences, cost_matrix)
+
+    assert len(pairing) == len(exact_pairing)
+
+    print(pairing)
 
     print(fitness(pairing, cost_matrix))
+    print(fitness(exact_pairing, cost_matrix))
     print(fitness(random_pairing(num_sequences), cost_matrix))
-
