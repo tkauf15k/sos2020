@@ -100,6 +100,16 @@ def fitness(pairing: List[Tuple[int, int]], cost_matrix: np.ndarray):
     return sum(cost_matrix[i][j] for i, j in pairing)
 
 
+def fitness_tuple(pairing: List[Tuple[int, int]], cost_matrix: np.ndarray):
+    '''
+    ea lib requires tuple as return value...
+    :param pairing:
+    :param cost_matrix:
+    :return:
+    '''
+    return (fitness(pairing, cost_matrix),)
+
+
 def random_pairing(num_sequences: int):
     indizes = list(range(num_sequences))
     random.shuffle(indizes)
@@ -107,6 +117,11 @@ def random_pairing(num_sequences: int):
     for i in range(num_sequences // 2):
         pairing.append((indizes[2 * i], indizes[2 * i + 1]))
     return pairing
+
+
+def validate(individual):
+    nodes = [i for a in individual for i in a]
+    assert len(set(nodes)) == len(nodes)
 
 
 if __name__ == "__main__":
