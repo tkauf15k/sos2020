@@ -11,7 +11,7 @@ import DNAnonRecombinations
 import DNAnonInitializer
 import evaluation
 
-num_sequences = 50  # 20 50 100
+num_sequences = 70  # 20 50 100
 input_path = "data/human_data_{}.fasta".format(num_sequences)
 
 if __name__ == "__main__":
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     mutation_rate = 1 / (num_sequences / 2)
 
     toolbox.register("evaluate", DNAnon.fitness_tuple, cost_matrix=cost_matrix)
-    toolbox.register("mate", DNAnonRecombinations.ordered_matching_best_match, toolbox=toolbox)
+    toolbox.register("mate", DNAnonRecombinations.arbitrary_matched_subgraph, toolbox=toolbox)
     toolbox.register("mutate", DNAnonMutations.two_opt_mutation, indpb=mutation_rate, toolbox=toolbox, cost_matrix=cost_matrix,
                      edge_selector=DNAnonMutations.select_best_edge)
     toolbox.register("select", tools.selTournament, tournsize=3)
