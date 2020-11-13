@@ -1,17 +1,14 @@
 from Bio import SeqIO
 import numpy as np
-from itertools import tee
 import IUBAmbiguities
 import timeit
 from functools import lru_cache
 from operator import itemgetter
-from typing import Set, List, Tuple
+from typing import List, Tuple
 import random
+import DNALA
 
 from data.ExactWeightedMatching import ExactWeightedMatching
-
-num_sequences = 20  # 20 50 100
-input_path = "data/human_data_{}.fasta".format(num_sequences)
 
 
 def find_gen(x, y, levels, hierarchy):
@@ -46,6 +43,7 @@ def find_gen(x, y, levels, hierarchy):
 
     return ord('N')
 
+
 @lru_cache(maxsize=None)
 def gen_cost(x, y):
     levels = IUBAmbiguities._levels
@@ -61,14 +59,12 @@ def gen_cost(x, y):
 
     return generalizer, cost
 
-def preprocess(input_path: str):
+
+def preprocess(input_path: str, num_sequences: int):
     with open(input_path, "r") as input_handle:
         sequences: List = list(SeqIO.parse(input_handle, 'fasta'))
 
     sequences: List[List[int]] = [[ord(c) for c in list(str(a.seq))] for a in sequences]
-
-    #for idx,dashes in sorted([(idx, len(np.where(np.array(s) == ord('-'))[0])) for idx, s in enumerate(sequences)],key=itemgetter(1)):
-    #    print("{} --> {}".format(idx, dashes))
 
     data: np.array = np.array(sequences, dtype=np.int)
 
@@ -81,7 +77,6 @@ def preprocess(input_path: str):
     # fill caches of all pairs
     for v, w in [(a, b) for a in IUBAmbiguities._alphabet for b in IUBAmbiguities._alphabet if ord(a) < ord(b)]:
         gen, cost = gen_cost(ord(v), ord(w))
-        # print('{} : {} => {}, {}'.format(v, w, chr(gen), cost))
 
     assert num_sequences == snvrs.shape[0]
 
@@ -90,60 +85,37 @@ def preprocess(input_path: str):
     start = timeit.default_timer()
 
     for a, b in [(a, b) for a in range(0, num_sequences) for b in range(0, num_sequences) if a < b]:
-
-        gen_cost_vect_func = np.vectorize(lambda a,b: itemgetter(1)(gen_cost(a, b)))
+        gen_cost_vect_func = np.vectorize(lambda a, b: itemgetter(1)(gen_cost(a, b)))
         sum_cost = np.sum(gen_cost_vect_func(snvrs[a, :], snvrs[b, :]))
         cost_matrix[a, b] = cost_matrix[b, a] = sum_cost
 
     end = timeit.default_timer()
 
-    # print("just some arbitrary output: {}".format(np.average(cost_matrix)))
     print("preparation of costmatrix required: {} s".format(end - start))
 
     return cost_matrix
 
-def DNALA(num_sequences: int, cost_matrix: np.ndarray):
-    def get_min_indizes(cost_matrix: np.ndarray, i: int, S: Set[int]) -> Set[int]:
-        row = cost_matrix[i, :]
-        possible_ind = S.difference({i})
 
-        mn = np.amin(np.take(row, list(possible_ind)))
-        ind = np.where(row == mn)[0]
-        return set(ind).intersection(possible_ind)
+def fitness(pairing: List[Tuple[int, int]], cost_matrix: np.ndarray):
+    return sum(cost_matrix[i][j] for i, j in pairing)
 
-    start = timeit.default_timer()
-    P = []
-    S = set(range(num_sequences))
-
-    while len(S) > 0:
-        for s in np.random.permutation(list(S)):
-            if s not in S:
-                continue
-
-            min_indizes_s = get_min_indizes(cost_matrix, s, S)
-
-            for c in np.random.permutation(list(min_indizes_s)):
-                min_indizes_c = get_min_indizes(cost_matrix, c, S)
-                if s in min_indizes_c:
-                    P.append((s,c))
-                    S.remove(s)
-                    S.remove(c)
-                    break
-    return P
-
-def fitness(pairing: List[Tuple[int,int]], cost_matrix: np.ndarray):
-    return sum(cost_matrix[i][j] for i,j in pairing)
 
 def random_pairing(num_sequences: int):
     indizes = list(range(num_sequences))
     random.shuffle(indizes)
     pairing = []
-    for i in range(num_sequences//2):
-        pairing.append((indizes[2*i], indizes[2*i+1]))
+    for i in range(num_sequences // 2):
+        pairing.append((indizes[2 * i], indizes[2 * i + 1]))
     return pairing
 
+
 if __name__ == "__main__":
-    cost_matrix = preprocess(input_path)
+    print("just some tests for reference algorithm and preprocessing...")
+
+    num_sequences = 20  # 20 50 100
+    input_path = "data/human_data_{}.fasta".format(num_sequences)
+
+    cost_matrix = preprocess(input_path, num_sequences)
     pairing = DNALA(num_sequences, cost_matrix)
     exact_pairing = ExactWeightedMatching(num_sequences, cost_matrix)
 
