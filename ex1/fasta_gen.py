@@ -1,3 +1,5 @@
+import random
+
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -5,8 +7,8 @@ from Bio.SeqRecord import SeqRecord
 min_length = 1000
 genome_count = 500
 
-input_path = "human_data.txt"
-output_path = "human_data.fasta"
+input_path = "human_data_new.txt"
+output_path = "human_data_new.fasta"
 
 sequences = []
 with open(input_path, 'r') as file:
@@ -20,6 +22,8 @@ with open(input_path, 'r') as file:
 
         if idx >= genome_count:
             break
+
+random.shuffle(sequences)
 
 with open(output_path, "w") as output_handle:
     SeqIO.write(sequences, output_handle, "fasta")

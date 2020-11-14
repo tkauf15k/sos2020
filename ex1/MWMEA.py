@@ -11,7 +11,7 @@ import DNAnonRecombinations
 import DNAnonInitializer
 import evaluation
 
-num_sequences = 70  # 20 50 100
+num_sequences = 20  # 20 50 100
 input_path = "data/human_data_{}.fasta".format(num_sequences)
 
 if __name__ == "__main__":
