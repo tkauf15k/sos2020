@@ -7,8 +7,8 @@ from Bio.SeqRecord import SeqRecord
 min_length = 1000
 genome_count = 500
 
-input_path = "human_data_new.txt"
-output_path = "human_data_new.fasta"
+input_path = "data/human_data_new.txt"
+output_path = "data/human_data_new.fasta"
 
 sequences = []
 with open(input_path, 'r') as file:

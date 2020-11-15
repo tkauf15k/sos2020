@@ -2,10 +2,10 @@ from Bio import AlignIO
 from Bio import SeqIO
 from Bio.Align import MultipleSeqAlignment
 
-input_path = "human_data.fasta"
+input_path = "data/human_data.fasta"
 max_count = 10
 
-with open("human_data_500.aln", "r") as input_handle:
+with open("data/human_data_500.aln", "r") as input_handle:
     test = AlignIO.parse(input_handle,"clustal")
     a = list(test)
 
