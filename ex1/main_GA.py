@@ -1,9 +1,6 @@
-import random
-import sys
 import timeit
-
-import numpy as np
 from deap import creator, base, tools, algorithms
+from lib import localsearch
 from lib.helperfunctions import preprocess, DNALA, fitness, fitness_tuple, opt_gap
 from lib.GA_operations import *
 from data.ExactWeightedMatching import ExactWeightedMatching
@@ -17,7 +14,6 @@ if __name__ == "__main__":
     cost_matrix = preprocess(input_path, num_sequences)
     greedy_heuristic_pairing = DNALA(num_sequences, cost_matrix)
     exact_pairing = ExactWeightedMatching(num_sequences, cost_matrix)
-
     optimum = fitness(exact_pairing, cost_matrix)
     greedy_heuristic = fitness(greedy_heuristic_pairing, cost_matrix)
 
@@ -51,9 +47,13 @@ if __name__ == "__main__":
         for fit, ind in zip(fits, offspring):
             ind.fitness.values = fit
         population = toolbox.select(offspring, k=len(population))
+
+        # ls improvement
+        # population = [ls_convert(localsearch(f, cost_matrix, num_iterations=100, first_improvement=True)) for f in population]
+
         best = tools.selBest(population, k=1)[0]
 
-        runtime = timeit.default_timer()-start
+        runtime = timeit.default_timer() - start
         if best.fitness.values[0] < best_fitness:
             best_fitness = best.fitness.values[0]
             best_solution = toolbox.clone(best)
@@ -64,7 +64,7 @@ if __name__ == "__main__":
                 break
         if runtime > max_time:
             break
-        gen+=1
+        gen += 1
 
     overall_runtime = timeit.default_timer() - start
     print("Terminated after: {} s / {} iterations, Best found after: {} s".format(overall_runtime, gen, best_time))

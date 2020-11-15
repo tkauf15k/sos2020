@@ -1,3 +1,6 @@
+import os
+import pickle
+
 import numpy as np
 from typing import Set
 from . import IUBAmbiguities
@@ -8,12 +11,15 @@ from functools import lru_cache
 from operator import itemgetter
 from typing import List, Tuple
 
+
 def validate(individual):
     nodes = [i for a in individual for i in a]
     assert len(set(nodes)) == len(nodes)
 
+
 def opt_gap(fitness, optimum):
     return ((1.0 * fitness - optimum) / optimum) * 100  # in percent...
+
 
 def DNALA(num_sequences: int, cost_matrix: np.ndarray):
     def get_min_indizes(cost_matrix: np.ndarray, i: int, S: Set[int]) -> Set[int]:
@@ -42,6 +48,7 @@ def DNALA(num_sequences: int, cost_matrix: np.ndarray):
                     S.remove(c)
                     break
     return P
+
 
 def find_gen(x, y, levels, hierarchy):
     if x == y:
@@ -93,6 +100,10 @@ def gen_cost(x, y):
 
 
 def preprocess(input_path: str, num_sequences: int):
+    pickle_path = input_path.replace('.fasta', '.cm')
+    if os.path.exists(pickle_path):
+        return pickle.load(open(pickle_path, "rb"))
+
     with open(input_path, "r") as input_handle:
         sequences: List = list(SeqIO.parse(input_handle, 'fasta'))
 

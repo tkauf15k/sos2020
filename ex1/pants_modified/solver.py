@@ -45,6 +45,7 @@ class Solver:
         self.elite = kwargs.get('elite', .5)
         self.improvement_callback = kwargs.get('improvement_callback', None)
         self.optimum = kwargs.get('optimum')
+        self.local_search_callback = kwargs.get('local_search_callback', None)
 
     def create_colony(self, world):
         """Create a set of :class:`Ant`\s and initialize them to the given 
@@ -93,8 +94,28 @@ class Solver:
         :rtype: :class:`Ant`
         """
         self.find_solutions(colony, world)
+        self.improve_colony(colony)
         self.global_update(colony, world)
         return sorted(colony)[0]
+
+    def improve_colony(self, colony):
+        if self.local_search_callback is None:
+            return
+        for ant in colony:
+            solution, cost = self.local_search_callback(ant.tour)
+            ant.start = solution[0]
+            ant.visited = solution.copy()
+            ant.distance = cost
+
+            path = []
+            for i in range(0, len(solution)):
+                if i % 2 == 0:
+                    path.append(ant.world.edges[solution[i], solution[i + 1]])
+                else:
+                    path.append(ant.world.dummy_edge)
+            assert len(path) == len(ant.path)
+            ant.traveled = path
+
 
     def solve(self, world):
         """Return the single shortest path found through the given *world*.
@@ -108,7 +129,7 @@ class Solver:
         colony = self.create_colony(world)
         start = timeit.default_timer()
         i = 0
-        while timeit.default_timer()-start < self.limit:
+        while timeit.default_timer() - start < self.limit:
             self.reset_colony(colony)
             local_best = self.aco(colony, world)
 
@@ -120,7 +141,7 @@ class Solver:
                     return (global_best, i)
 
             self.trace_elite(global_best)
-            i+=1
+            i += 1
         return (global_best, i)
 
     def solutions(self, world):
