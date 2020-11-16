@@ -136,7 +136,7 @@ class Solver:
             if global_best is None or local_best < global_best:
                 global_best = copy(local_best)
                 if self.improvement_callback != None:
-                    self.improvement_callback(fitness=global_best.distance, iteration=i)
+                    self.improvement_callback(fitness=global_best.distance, iteration=i, solution = global_best)
                 if global_best.distance <= self.optimum:
                     return (global_best, i)
 

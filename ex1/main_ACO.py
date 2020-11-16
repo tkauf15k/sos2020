@@ -30,7 +30,7 @@ best_iteration = 0
 start = 0
 
 
-def improvement_callback(fitness, iteration):
+def improvement_callback(fitness, iteration, solution):
     gap = opt_gap(fitness, optimum)
     global best_time
     global best_iteration
