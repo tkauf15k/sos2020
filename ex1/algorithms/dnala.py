@@ -20,7 +20,7 @@ class dnala(algorithm_base):
 
         if self.localsearch:
             iterations += 1
-            pairing_dnala, cost = localsearch(pairing_dnala, cost_matrix, num_iterations=100)
+            pairing_dnala, cost = localsearch(pairing_dnala, cost_matrix, num_iterations=50, first_improvement=True, termination=(lambda: self.terminated(time_limit)))
             self.report_improvement(cost, 1, pairing_dnala)
 
         self.stop_run(iterations)

@@ -3,7 +3,7 @@
 import sys
 import timeit
 
-import pants_modified as pants
+import pants as pants
 import math
 import random
 

@@ -23,7 +23,7 @@ class algorithm_base:
     def report(self, output):
         with open(output, 'w') as out_file:
             out_file.write("optimum={}\n".format(self.optimum))
-            out_file.write("execution_time={}\n".format(self.stop_time - self.start_time))
+            out_file.write("execution_time={},start_time={},stop_time={}\n".format(self.stop_time - self.start_time, self.start_time, self.stop_time))
             out_file.write(str(self.best_solution) + "\n")
 
             for t in self.trace:

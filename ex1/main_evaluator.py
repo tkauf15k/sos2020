@@ -55,7 +55,7 @@ def genetic_algorithm_cmd(ctx, populationsize, improvingmutation, mutationratefa
     algorithm.report(output)
 
 
-@cli.command(name='dnla')
+@cli.command(name='dnala')
 @click.pass_context
 @click.option('-l', '--localsearch', required=False, type=bool, default=False)
 def baseline_dnala_heuristic_cmd(ctx, localsearch):

@@ -1,8 +1,8 @@
 from deap import base, tools, algorithms
 from algorithms.algorithm_base import algorithm_base
-from lib import localsearch
 from lib.GA_operations import *
 from lib.helperfunctions import fitness_tuple
+from lib.localsearch import localsearch
 
 
 class genetic_algorithm(algorithm_base):
@@ -59,7 +59,7 @@ class genetic_algorithm(algorithm_base):
             population = toolbox.select(offspring, k=len(population))
 
             if self.localsearch:
-                population = [ls_convert(localsearch(f, cost_matrix, num_iterations=100, first_improvement=True)) for f in population]
+                population = [ls_convert(localsearch(f, cost_matrix, num_iterations=50, first_improvement=True, termination=(lambda: self.terminated(time_limit)))) for f in population]
 
             best = tools.selBest(population, k=1)[0]
 

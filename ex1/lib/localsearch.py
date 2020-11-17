@@ -4,13 +4,16 @@ import numpy as np
 from lib import helperfunctions
 
 
-def localsearch(solution: List[Tuple[int, int]], cost_matrix: np.ndarray, num_iterations=20, first_improvement = False):
+def localsearch(solution: List[Tuple[int, int]], cost_matrix: np.ndarray, num_iterations=20, first_improvement=False, termination=None):
     incumbent_solution = solution.copy()
     incumbent_solution_fitness = helperfunctions.fitness(incumbent_solution, cost_matrix)
 
     for i in range(0, num_iterations):
 
-        delta, m1, m2 = improving_neighbor(incumbent_solution, cost_matrix, first_improvement)
+        if termination != None and termination():
+            break
+
+        delta, m1, m2 = improving_neighbor(incumbent_solution, cost_matrix, first_improvement, termination)
 
         if delta is None or delta >= 0:
             break
@@ -37,14 +40,20 @@ def apply(m1: Tuple[int, Tuple[int, int]], m2: Tuple[int, Tuple[int, int]], solu
     helperfunctions.validate(solution)
 
 
-def improving_neighbor(solution: List[Tuple[int, int]], cost_matrix: np.ndarray, first_improvement):
+def improving_neighbor(solution: List[Tuple[int, int]], cost_matrix: np.ndarray, first_improvement, termination=None):
     best_improvement = 0
     m1 = None
     m2 = None
 
+    iteration = 0
+
     for i, j in [(i, j) for i in range(0, len(solution)) for j in range(0, len(solution)) if i < j]:
         m11, m12 = solution[i]
         m21, m22 = solution[j]
+
+        iteration += 1
+        if iteration % 100 == 0 and termination != None and termination():
+            break
 
         base_cost = cost_matrix[m11, m12] + cost_matrix[m21, m22]
 
@@ -62,6 +71,5 @@ def improving_neighbor(solution: List[Tuple[int, int]], cost_matrix: np.ndarray,
 
         if best_improvement < 0 and first_improvement:
             break
-
 
     return best_improvement, m1, m2
