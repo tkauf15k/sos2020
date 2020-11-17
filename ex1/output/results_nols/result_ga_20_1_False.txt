@@ -1,0 +1,14 @@
+optimum=11758
+execution_time=1.3824982000000001,start_time=0.5948372,stop_time=1.9773354
+[(3, 2), (13, 19), (18, 14), (12, 15), (6, 7), (11, 10), (16, 17), (1, 0), (9, 8), (4, 5)]
+fitness=26396.0,iteration=0,gap=124.49396155808812,delta=14638.0,timestamp=0.6602979
+fitness=23066.0,iteration=1,gap=96.17281850654874,delta=11308.0,timestamp=0.736491
+fitness=22688.0,iteration=2,gap=92.95798605204966,delta=10930.0,timestamp=0.7953375
+fitness=21178.0,iteration=3,gap=80.11566592957986,delta=9420.0,timestamp=0.8642716
+fitness=20174.0,iteration=4,gap=71.57679877530192,delta=8416.0,timestamp=0.9230626
+fitness=18842.0,iteration=6,gap=60.24834155468617,delta=7084.0,timestamp=1.0431799
+fitness=16892.0,iteration=7,gap=43.66388841639734,delta=5134.0,timestamp=1.0972062
+fitness=15036.0,iteration=8,gap=27.878890967851678,delta=3278.0,timestamp=1.155996
+fitness=12574.0,iteration=11,gap=6.939955774791631,delta=816.0,timestamp=1.3469312
+fitness=12070.0,iteration=14,gap=2.653512502126212,delta=312.0,timestamp=1.5401289
+fitness=11758.0,iteration=21,gap=0.0,delta=0.0,timestamp=1.9773104

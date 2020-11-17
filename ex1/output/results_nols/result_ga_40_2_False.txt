@@ -1,0 +1,27 @@
+optimum=20892
+execution_time=6.220380899999999,start_time=0.753084,stop_time=6.9734649
+[(7, 36), (2, 3), (23, 24), (33, 32), (6, 11), (17, 18), (30, 31), (1, 0), (15, 16), (38, 37), (4, 5), (35, 34), (19, 20), (39, 29), (8, 9), (21, 22), (12, 10), (13, 14), (26, 27), (28, 25)]
+fitness=79654.0,iteration=0,gap=281.2655561937584,delta=58762.0,timestamp=0.8909399
+fitness=79628.0,iteration=2,gap=281.1411066436914,delta=58736.0,timestamp=1.126548
+fitness=65152.0,iteration=3,gap=211.85142638330464,delta=44260.0,timestamp=1.2408682
+fitness=62428.0,iteration=5,gap=198.81294275320698,delta=41536.0,timestamp=1.4774279
+fitness=60152.0,iteration=6,gap=187.91882060118706,delta=39260.0,timestamp=1.5820175
+fitness=48254.0,iteration=7,gap=130.96879188206012,delta=27362.0,timestamp=1.7160912
+fitness=45270.0,iteration=8,gap=116.68581275129235,delta=24378.0,timestamp=1.8378215
+fitness=39384.0,iteration=9,gap=88.51234922458357,delta=18492.0,timestamp=1.9648563
+fitness=39272.0,iteration=13,gap=87.97625885506413,delta=18380.0,timestamp=2.4707526
+fitness=36868.0,iteration=14,gap=76.46946199502202,delta=15976.0,timestamp=2.5937526
+fitness=32882.0,iteration=17,gap=57.3903886655179,delta=11990.0,timestamp=2.9232289
+fitness=32112.0,iteration=19,gap=53.704767375071796,delta=11220.0,timestamp=3.1751
+fitness=28440.0,iteration=21,gap=36.128661688684666,delta=7548.0,timestamp=3.4185117
+fitness=27636.0,iteration=23,gap=32.28029867892016,delta=6744.0,timestamp=3.6471481
+fitness=26976.0,iteration=24,gap=29.121194715680645,delta=6084.0,timestamp=3.7608096
+fitness=26408.0,iteration=26,gap=26.402450698832087,delta=5516.0,timestamp=3.9904854
+fitness=24830.0,iteration=28,gap=18.849320313995786,delta=3938.0,timestamp=4.233692
+fitness=23908.0,iteration=30,gap=14.436147807773311,delta=3016.0,timestamp=4.4696085
+fitness=22840.0,iteration=31,gap=9.324143212713,delta=1948.0,timestamp=4.5975918
+fitness=22714.0,iteration=35,gap=8.721041547003638,delta=1822.0,timestamp=5.0729425
+fitness=22448.0,iteration=37,gap=7.447826919394984,delta=1556.0,timestamp=5.3097676
+fitness=22136.0,iteration=40,gap=5.954432318590848,delta=1244.0,timestamp=5.6599987
+fitness=21176.0,iteration=46,gap=1.3593720084242773,delta=284.0,timestamp=6.3535077
+fitness=20892.0,iteration=51,gap=0.0,delta=0.0,timestamp=6.973431

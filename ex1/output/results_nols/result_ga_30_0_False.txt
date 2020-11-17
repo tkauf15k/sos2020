@@ -1,0 +1,18 @@
+optimum=19032
+execution_time=3.4583931999999997,start_time=0.8310296,stop_time=4.2894228
+[(5, 29), (14, 12), (28, 27), (23, 24), (22, 21), (15, 16), (4, 3), (25, 26), (19, 20), (11, 13), (10, 9), (6, 2), (18, 17), (1, 0), (7, 8)]
+fitness=57532.0,iteration=0,gap=202.29087852038668,delta=38500.0,timestamp=0.9464144
+fitness=48012.0,iteration=1,gap=152.26986128625472,delta=28980.0,timestamp=1.0724941
+fitness=47784.0,iteration=3,gap=151.0718789407314,delta=28752.0,timestamp=1.2954754
+fitness=46684.0,iteration=4,gap=145.29213955443464,delta=27652.0,timestamp=1.4137908
+fitness=36038.0,iteration=5,gap=89.35477091214796,delta=17006.0,timestamp=1.5272263
+fitness=32684.0,iteration=9,gap=71.73182009247583,delta=13652.0,timestamp=1.9949604
+fitness=31322.0,iteration=10,gap=64.57545187053384,delta=12290.0,timestamp=2.1079206
+fitness=29740.0,iteration=11,gap=56.26313577133249,delta=10708.0,timestamp=2.2211898
+fitness=28652.0,iteration=14,gap=50.54644808743169,delta=9620.0,timestamp=2.5651408
+fitness=26156.0,iteration=16,gap=37.43169398907104,delta=7124.0,timestamp=2.7863325
+fitness=24306.0,iteration=18,gap=27.71122320302648,delta=5274.0,timestamp=3.0179936
+fitness=21746.0,iteration=19,gap=14.260193358554012,delta=2714.0,timestamp=3.1295068
+fitness=19906.0,iteration=20,gap=4.5922656578394285,delta=874.0,timestamp=3.2453521
+fitness=19536.0,iteration=26,gap=2.648171500630517,delta=504.0,timestamp=3.9343069
+fitness=19032.0,iteration=29,gap=0.0,delta=0.0,timestamp=4.2893891

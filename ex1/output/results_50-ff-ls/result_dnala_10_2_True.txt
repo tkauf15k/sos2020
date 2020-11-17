@@ -1,0 +1,5 @@
+optimum=1994
+execution_time=0.0007059999999999844,start_time=0.737333,stop_time=0.738039
+[(5, 6), (2, 3), (8, 9), (1, 0), (7, 4)]
+fitness=1994,iteration=0,gap=0.0,delta=0,timestamp=0.7379426
+fitness=1994,iteration=1,gap=0.0,delta=0,timestamp=0.7380302

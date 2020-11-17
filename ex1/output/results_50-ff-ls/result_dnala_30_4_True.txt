@@ -1,0 +1,5 @@
+optimum=19032
+execution_time=0.002268899999999907,start_time=0.8570465,stop_time=0.8593154
+[(0, 1), (9, 10), (21, 22), (17, 18), (2, 4), (19, 20), (12, 13), (8, 7), (15, 16), (24, 26), (3, 6), (23, 25), (14, 11), (29, 5), (27, 28)]
+fitness=19032,iteration=0,gap=0.0,delta=0,timestamp=0.8588063
+fitness=19032,iteration=1,gap=0.0,delta=0,timestamp=0.8593045
