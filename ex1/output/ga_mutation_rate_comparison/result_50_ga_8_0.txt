@@ -1,0 +1,23 @@
+optimum=34198
+execution_time=300.0305821,start_time=1.4793958,stop_time=301.5099779
+[(46, 21), (34, 36), (18, 19), (49, 27), (13, 12), (17, 16), (3, 6), (32, 47), (35, 38), (15, 20), (11, 9), (29, 28), (14, 33), (24, 26), (42, 43), (37, 39), (45, 44), (30, 31), (5, 10), (40, 41), (23, 48), (4, 0), (25, 22), (8, 7), (2, 1)]
+fitness=131264.0,iteration=0,gap=283.83531200655005,delta=97066.0,timestamp=1.7087147
+fitness=125326.0,iteration=2,gap=266.4717234926019,delta=91128.0,timestamp=2.1903509
+fitness=115940.0,iteration=3,gap=239.0256740160243,delta=81742.0,timestamp=2.4158258
+fitness=102914.0,iteration=4,gap=200.93572723551083,delta=68716.0,timestamp=2.6564307
+fitness=80288.0,iteration=7,gap=134.7739633896719,delta=46090.0,timestamp=3.2865242
+fitness=79748.0,iteration=11,gap=133.19492367974735,delta=45550.0,timestamp=4.1305278
+fitness=76062.0,iteration=13,gap=122.41651558570676,delta=41864.0,timestamp=4.5832646
+fitness=75224.0,iteration=14,gap=119.96607988771272,delta=41026.0,timestamp=4.8403321
+fitness=64312.0,iteration=15,gap=88.05778115679279,delta=30114.0,timestamp=5.0490676
+fitness=63250.0,iteration=16,gap=84.95233639394117,delta=29052.0,timestamp=5.2677282
+fitness=62508.0,iteration=17,gap=82.78261886660039,delta=28310.0,timestamp=5.5091121
+fitness=60214.0,iteration=18,gap=76.07462424703199,delta=26016.0,timestamp=5.7118082
+fitness=59664.0,iteration=20,gap=74.46634306099772,delta=25466.0,timestamp=6.1244737
+fitness=56384.0,iteration=21,gap=64.87513889701152,delta=22186.0,timestamp=6.3916218
+fitness=53340.0,iteration=22,gap=55.974033569214576,delta=19142.0,timestamp=6.6284299
+fitness=52032.0,iteration=23,gap=52.14924849406398,delta=17834.0,timestamp=6.8783614
+fitness=49220.0,iteration=25,gap=43.926545412012395,delta=15022.0,timestamp=7.326159
+fitness=46230.0,iteration=27,gap=35.183344055207904,delta=12032.0,timestamp=7.8417018
+fitness=46082.0,iteration=31,gap=34.75057020878414,delta=11884.0,timestamp=8.7845945
+fitness=43666.0,iteration=32,gap=27.685829580677236,delta=9468.0,timestamp=8.9921732

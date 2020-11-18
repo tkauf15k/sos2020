@@ -11,6 +11,9 @@
 \usepackage{booktabs}
 \usepackage{graphics}
 \usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{mwe}
 
 \begin{document}
 \maketitle
@@ -157,6 +160,69 @@ DNALA & 10  &     1994 &     1994 &   0.00 &   0.00 &          0 &     1994 &  0
 }
 \end{table}
 
+
+  \begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figures/ga_50_population_comparison.pdf}
+            \caption%
+            {{\small }}    
+            \label{fig:mean and std of net14}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}  
+            \centering 
+            \includegraphics[width=\textwidth]{figures/ga_100_population_comparison.pdf}
+            \caption%
+            {{\small }}     
+            \label{fig:mean and std of net24}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{figures/aco_50_population_comparison.pdf}
+            \caption%
+            {{\small }}      
+            \label{fig:mean and std of net34}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{figures/aco_100_population_comparison.pdf}
+            \caption%
+            {{\small }}    
+            \label{fig:mean and std of net44}
+        \end{subfigure}
+        \caption
+        {\small Optimality gap over time for different population sizes on instances with $n=50$ and $n=100$ vertices. } 
+        \label{fig:mean and std of nets}
+    \end{figure*}
+
+
+
+
+ \begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figures/ga_50_mutation_rate_comparison.pdf}
+            \caption%
+            {{\small }}    
+            \label{fig:mean and std of net14}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}  
+            \centering 
+            \includegraphics[width=\textwidth]{figures/aco_50_alpha_beta_ratio_comparison.pdf}
+            \caption%
+            {{\small }}     
+            \label{fig:mean and std of net24}
+        \end{subfigure}
+        \caption
+        {\small Optimality gap over time for different population sizes on instances with $n=50$ and $n=100$ vertices. } 
+        \label{fig:mean and std of nets}
+    \end{figure*}
 
 
 todo add some experiments with different parameters for population size

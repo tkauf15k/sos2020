@@ -1,0 +1,10 @@
+optimum=34198
+execution_time=212.6475465,start_time=1.3162343,stop_time=213.9637808
+[(46, 43), (22, 25), (18, 20), (11, 5), (19, 16), (42, 45), (1, 0), (7, 8), (23, 24), (33, 32), (10, 9), (47, 21), (15, 14), (28, 29), (39, 37), (38, 36), (41, 40), (3, 2), (49, 44), (4, 6), (27, 17), (31, 30), (12, 13), (35, 34), (48, 26)]
+fitness=40966,iteration=0,gap=19.79063103105445,delta=6768,timestamp=1.5545948
+fitness=37244,iteration=1,gap=8.90695362301889,delta=3046,timestamp=1.7896235
+fitness=36732,iteration=3,gap=7.4097900462015325,delta=2534,timestamp=2.2717541
+fitness=35112,iteration=14,gap=2.6726709164278613,delta=914,timestamp=4.9358412
+fitness=34246,iteration=121,gap=0.14035908532662728,delta=48,timestamp=29.2719794
+fitness=34206,iteration=288,gap=0.023393180887771214,delta=8,timestamp=68.7712418
+fitness=34198,iteration=892,gap=0.0,delta=0,timestamp=213.9637073
