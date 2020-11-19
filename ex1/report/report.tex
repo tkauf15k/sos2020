@@ -30,7 +30,7 @@ Now, that every sequence has the same length, we can compute the distance betwee
 The last and main step is to combine this set of sequences into pairs, such that the sum of distances of two sequences of pair summed up over all pairs is minimal.
 Obviously this is just an application of minimal weighted matching in a complete graph, where a graph is represented by $G=(V,E)$ as follows.
 The set $V$ of nodes are described by the sequences and the set $E$ of edges is $V\times V$.
-For an edge $e=\{u,v\}$ its weight $w(e)$ is just the distance between the sequences $u$ and $v$.
+For an edge $e=\{u,v\}$ its weight $w(e)$ is just the distance between the sequences $u$ and $v$. Furthermore, let $M \subset E$ be a complete matching on graph $G$, s.t. $2 \times |M| = |V|$, and $c(M)$ the corresponding weight of the matching.
 
 In the next sections we describe our solution approaches and main results.
 
@@ -63,10 +63,16 @@ The well-know genetic algorithm compononents are implemented as follows:
     \item \textbf{Solution representation}: A solution consists of $\frac{n}{2}$ pairs such that each node (sequence) appears in exactly one pair.
     \item \textbf{Fitness}: The fitness is just the sum of distances between pairs of points. 
     This in fact also represents the value of a weighted matching the corresponding weighted matching.
-    \item \textbf{Crossover}: 
-    \item \textbf{Mutation}: Selects a random pair of matchings based on the mutation probability and the best two-opt move in the induced subgraph. 
+    \item \textbf{Crossover}: Given a pair of individuals $M_i$ and $M_j$, we derive a successor individual $M_{i'}$ with the following procedure:
+    \begin{enumerate}
+    	\item Select a subset $M'_i \subset M_i$ of matchings from individual $M_i$, where each edge $e \in M_i$ is selected with a probability of $0.5$. 
+    	\item We then try to identify matchings $e \in M_j$ composed of edges not contained in $M'_i$, which are entirely preserved for the offspring $M_{i'}$.
+    	\item Finally, we identify the remaining unmatched vertices and pair them randomly. 
+    \end{enumerate}
+    It is worth to notice that different variations of this approach were tested, considering orders of matchings in the solution representation as well as alternative strategies to pair remaining vertices, but no significant improved was obtained. 
+    \item \textbf{Mutation}: Given an individual $M$, selects a random pair $e=\{u,v\}$, $e'=\{u',v'\} \in M$ of matchings based on a given mutation probability and constructs an offspring $M'$ by performing 1) an arbitrary or 2) the best two-opt in the subgraph induced by vertices $V=\{u,v,u',v'\}$. Experiments showed advantages for the intensifying mutation approach (i.e. the best two-opt neighbour) at only a negligible increase in computational cost. 
 \end{itemize}
-Furthermore we have the option to select different population sizes and mutation rates for running the algorithm.
+Furthermore we used a tournament selection strategy with tournament size of $k=3$ and have the option to select different population sizes and mutation rates for running the algorithm.
 
 \section{Ant Colony Optimization}
 At first we did not know how to solve the problem with ant colony optimization.
@@ -85,18 +91,15 @@ This means when an ant can chose its next edge there are two different strategie
     \item If the path until now has odd length, then go to any not yet visited node.
     This resembles the fact that every other edge of the tour will have weight 0.
 \end{itemize}
-Of course we also have to alter the cost of a tour, in partical that every other edge has weight 0, to guide the algorithm to an optimal solution.
+Of course we also have to alter the cost of a tour, in particular that every other edge has weight 0, to guide the algorithm to an optimal solution.
 
 One might think that this construction of an algorithm to solve the minimum weighted matching problem is pretty superficial, but we will see that its performance is not too bad.
 
 \section{Local Search}
-two-opt neighborhood
-first fit step function 
-...
-
-
+While population based metaheuristics are usually great to identify high quality solution components in widely distributed solution spaces, they tend to end up in suboptimal regions, where simple intensification procedures like local search heuristics can significantly improve the solution quality. To this end, it is so common that population based metaheuristics are combined with local search procedures that for genetic algorithms the term \emph{memetic algorithm} has been established in the literature. In this work, we used a relatively simple two-opt neighbourhood structure with a constant time neighbour evaluation scheme and a first-improvement step function to improve populations of both the ACO as well as the GA. 
 
 \section{Results \& Conclusion}
+As described above, we used a set of $12$ instances 
 
 info:
 300s execution time
