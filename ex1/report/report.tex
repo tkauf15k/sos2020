@@ -24,8 +24,8 @@ The task is to find a pairing of DNA sequences, such that the sum of distances b
 
 More specifically we are given a set of $n$ sequences described by strings which can have different length.
 In a first step we have to align these sequences, such that all sequences have the same length.
-This is done by introducing a \textit{gap}-characters to increase the length of sequences.
-In general this process is called multiple sequence alignment (MSA) and we do not describe how this is done here, but rather use a python-library as a black-box tool for this step.
+This is done by introducing \textit{gap}-characters to increase the length of sequences.
+In general this process is called multiple sequence alignment (MSA) and we do not describe how this is done here, but rather use a library as a black-box tool for this step.
 Now, that every sequence has the same length, we can compute the distance between two sequences as described in \cite{mainpaper}.
 The last and main step is to combine this set of sequences into pairs, such that the sum of distances of two sequences of a pair summed up over all pairs is minimal.
 Obviously this is just an application of minimal weighted matching in a complete graph, where a graph is represented by $G=(V,E)$ as follows.
@@ -43,7 +43,7 @@ Test-case sizes are always even, such that we do not have to bother about the le
 For each of these instances we performed some preprocessing with the python module \textit{Bio.SeqIO} from the package \textit{Bio} (\url{https://biopython.org/wiki/SeqIO}) and as suggested in ~\cite{mainpaper} compute multiple sequence alignments with the MSA-toolkit \emph{ClustalW}~\cite{clustalw}. 
 In the last step we compute the cost-matrix between pairs of sequences as described in \cite{mainpaper}.
 All of the algorithms described in the next section only use the cost-matrix to compute a pairing.
-Although we chose instances of sizes comparable to the work of Bradley~\cite{mainpaper}, as shown below, instances turned out being relatively easy to solve where even the relatively simple construction heuristic obtains high quality solutions in little to no execution time. We then further investigated this behavior in more depth and found that a specially structured cost matrix due to the tree-based alignment procedure in \emph{ClustalW} often leads to edge-costs of $0$ between specific pairs in graph, inherently favouring the nature of the DNALA construction heuristic. 
+Although we chose instances of sizes comparable to the work of Bradley~\cite{mainpaper}, as shown below, instances turned out being relatively easy to solve where even the relatively simple construction heuristic obtains high quality solutions in little to no execution time. We then further investigated this behavior in more depth and found that a specially structured cost matrix due to the tree-based alignment procedure in \emph{ClustalW} often leads to edge-costs of $0$ between specific pairs in the graph, inherently favouring the nature of the DNALA construction heuristic. 
 
 These test-cases can be found in the project under the folder \textit{data}:
 Sequence alignments for each test-case are stored in the files \textit{human\_data\_XX.fasta} where \textit{XX} denotes the size of the test-case.
@@ -73,7 +73,7 @@ The well-know genetic algorithm compononents are implemented as follows:
     	\item Finally, we identify the remaining unmatched vertices and pair them randomly. 
     \end{enumerate}
     It is worth to notice that different variations of this approach were tested, considering orders of matchings in the solution representation as well as alternative strategies to pair remaining vertices, but no significant improved was obtained. 
-    \item \textbf{Mutation}: Given an individual $M$, selects a random pair $e=\{u,v\}$, $e'=\{u',v'\} \in M$ of matchings based on a given mutation probability and constructs an offspring $M'$ by performing 1) an arbitrary or 2) the best two-opt in the subgraph induced by vertices $V=\{u,v,u',v'\}$. Experiments showed advantages for the intensifying mutation approach (i.e. the best two-opt neighbour) at only a negligible increase in computational cost. 
+    \item \textbf{Mutation}: Given an individual $M$, selects a random pair $e=\{u,v\}$, $e'=\{u',v'\} \in M$ of matchings based on a given mutation probability and constructs an offspring $M'$ by performing 1) an arbitrary or 2) the best two-opt in the subgraph induced by vertices $V=\{u,v,u',v'\}$. Experiments showed slight advantages for the intensifying mutation approach (i.e. the best two-opt neighbour) at only a negligible increase in computational cost. 
 \end{itemize}
 Furthermore we used a tournament selection strategy with tournament size of $k=3$ and have the option to select different population sizes and mutation rates for running the algorithm.
 
@@ -105,7 +105,7 @@ While population based metaheuristics are usually great to identify high quality
 To evaluate the described approaches, experiments with a set of $12$ differently sized instances were run for different kinds of algorithm configurations. 
 We used the optimality gap as a scale invariant performance measure describing the relative distance to the global optimum. 
 As for particularly large instances, some configurations did converge towards the global optimum.
-All experiments were run with a wallclock time of $300 s$ and $5$ repetitions each for statistical stability. Execution times do not include preparation time of cost matrices, since they have been precomputed and stored for reuse.
+All experiments were run with a wallclock time of $300 s$ and $5$ repetitions each for statistical stability. Execution times do not include preparation time of cost matrices, since they have been precomputed and stored for reuse. All experiments were run on a Windows 10 machine with AMD Ryzen 3700X CPU in single-threaded mode. 
 
 \subsection{Comparison of GA, ACO and DNALA}
 
@@ -116,8 +116,8 @@ Main observations:
 	\item Purely population-based metaheuristic approaches work quite well for moderate sized instances, but solution quality declines significantly with increasing instance sizes. While for smaller instances, some instances could even be solved to optimality, for large instances the gap increases even above $100\%$ optimality gap. 
 	\item Both approaches show the same behaviour with respect to the overall number of iterations conducted in the given period, where in smaller instances optimal solutions are obtained relatively fast and as the instance size increases, also the number of iterations until premature termination due to optimality increases. At some point, however, instances become more difficult and more expensive in terms of computational cost, such that the iteration count then steadily decreases, which in turn also affects solution quality. 
 	\item It can be observed that our GA does not suffer from premature convergence as the iteration where the best solution was obtained tends to be close to the overall iteration count. This suggests that more iterations could still improve the solution quality. 
-	\item Local search generally improves quality significantly, allowing to solve even larger instances almost to optimality. However, iteration count drops to a level where our GA is basically just a \emph{fancy} random restart procedure. 
-	\item The effectiveness of two-opt local search	backs up our observation of the biased instance generation procedure mentioned in Section~\ref{sec:test-data}, since this simple neighborhood is able to identify the respective pairs of minimal cost easily. Furthermore, DNALA + LS seems to be quite good combtination 
+	\item Local search generally improves quality significantly, allowing to solve even larger instances almost to optimality. However, iteration count drops to a level suggesting our GA being basically just a \emph{fancy} random restart procedure. 
+	\item The effectiveness of two-opt local search	backs up our observation of the biased instance generation procedure with \textit{ClustalW} mentioned in Section~\ref{sec:test-data}, since this simple neighborhood is able to identify the respective pairs of minimal cost easily. Furthermore, DNALA + LS seems to be quite good combtination 
 \end{itemize}
 
 \begin{table}
@@ -181,7 +181,7 @@ The previous section showed that our GA is not subject to premature convergence.
 Main observations:
 \begin{itemize}
 	\item The randomized approach general performs quite similarly, however, tends to require more iterations for comparable solution qualities (e.g. $n=70$)
-	\item For smaller instances, the locally-improving moves seem to be slightly advantageous in terms of conversation pace. 
+	\item For smaller instances, the locally-improving moves seem to be slightly advantageous in terms of convergence pace. 
 	\item As the instance size increases, the effect of small locally-improving moves seem to vanish and both quality as well as iteration characteristics seem to align. 
 \end{itemize}
 
@@ -207,10 +207,10 @@ Best  & 70  &  47234.00 &  47366.00 &   0.28 & 221.00 &     320.00 &            
       & 150 & 104772.00 & 192572.00 &  83.80 & 300.00 &     135.50 &             135.50 \\
       & 200 & 130178.00 & 279480.00 & 114.69 & 300.00 &     143.50 &             143.50 \\
 \bottomrule
+
 \end{tabular}%
 }
-\label{tab:mutation-operator}
-\caption{Comparison of the random and best two-opt move in the GA mutation operator.}
+\caption{Comparison of the random and best two-opt move in the GA mutation operator.}\label{tab:mutation-operator}
 \end{table}
 
 
@@ -267,12 +267,12 @@ Main observations:
 
 \subsection{Hyper-parameters}
 In addition to some manual tweaking of hyper-parameters, we performed a very limited comparison of selected hyper-parameters of both the GA and the ACO. 
-The default mutation rate corresponds to $2/|V|$, multiplied by a tunable parameter $r \in \{1,4,8\}$. 
+The default mutation rate corresponds to $2/|V|$, multiplied by a tunable parameter $r \in \{1,4,8\}$. The integer values for alpha and beta define the relative importance of pheromones and distances respectively. 
 
 Main observations:
 \begin{itemize}
 	\item We can clearly see that with too high mutation rate ($r=8$) the genetic algorithm does not converge to the optimum, whereas for $r=1$ and $r=4$ the performance is similar.
-	\item For ACO alpha=1 and beta=4 or beta=8 clearly outperforms all other parameter choices.
+	\item For ACO alpha=1 and beta=4 or beta=8 clearly outperforms all other parameter choices, suggesting the importance of distance information rather than pheromones again likely due to specially structured instances.
 \end{itemize}
 
  \begin{figure*}
