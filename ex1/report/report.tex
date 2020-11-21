@@ -25,12 +25,13 @@ The task is to find a pairing of DNA sequences, such that the sum of distances b
 More specifically we are given a set of $n$ sequences described by strings which can have different length.
 In a first step we have to align these sequences, such that all sequences have the same length.
 This is done by introducing a \textit{gap}-characters to increase the length of sequences.
-In general this process is called multiple sequence alignment (MSA) and we do not describe how this is done here but rather use a python-library as a black-box tool for this step.
+In general this process is called multiple sequence alignment (MSA) and we do not describe how this is done here, but rather use a python-library as a black-box tool for this step.
 Now, that every sequence has the same length, we can compute the distance between two sequences as described in \cite{mainpaper}.
-The last and main step is to combine this set of sequences into pairs, such that the sum of distances of two sequences of pair summed up over all pairs is minimal.
+The last and main step is to combine this set of sequences into pairs, such that the sum of distances of two sequences of a pair summed up over all pairs is minimal.
 Obviously this is just an application of minimal weighted matching in a complete graph, where a graph is represented by $G=(V,E)$ as follows.
 The set $V$ of nodes are described by the sequences and the set $E$ of edges is $V\times V$.
-For an edge $e=\{u,v\}$ its weight $w(e)$ is just the distance between the sequences $u$ and $v$. Furthermore, let $M \subset E$ be a complete matching on graph $G$, s.t. $2 \times |M| = |V|$, and $c(M)$ the corresponding weight of the matching.
+For an edge $e=\{u,v\}$ its weight $w(e)$ is just the distance between the sequences $u$ and $v$. 
+We denote by $M \subset E$ a complete matching on a graph $G$, s.t. $2 \times |M| = |V|$, and by $c(M)$ the corresponding weight of the matching.
 
 In the next sections we describe our solution approaches and main results.
 
@@ -39,9 +40,10 @@ In the next sections we describe our solution approaches and main results.
 As base set of data we chose DNA sequences from \url{https://www.kaggle.com/neelvasani/humandnadata} which consists of over 4000 human DNA sequences.
 In a next step we created multiple instances of different size by selecting 10-300 random samples of these sequences.
 Test-case sizes are always even, such that we do not have to bother about the leftover single sequence.
-For each of these instances we performed some preprocessing with the python module \textit{Bio.SeqIO} from the package \textit{Bio} (\url{https://biopython.org/wiki/SeqIO}) and as suggested in ~\cite{mainpaper} computed  multiple sequence alignments with the MSA-toolkit \emph{ClustalW}~\cite{clustalw}. In the last step we compute the cost-matrix between pairs of sequences as described in \cite{mainpaper}.
+For each of these instances we performed some preprocessing with the python module \textit{Bio.SeqIO} from the package \textit{Bio} (\url{https://biopython.org/wiki/SeqIO}) and as suggested in ~\cite{mainpaper} compute multiple sequence alignments with the MSA-toolkit \emph{ClustalW}~\cite{clustalw}. 
+In the last step we compute the cost-matrix between pairs of sequences as described in \cite{mainpaper}.
 All of the algorithms described in the next section only use the cost-matrix to compute a pairing.
-Although we chose instances of sizes comparable to the work of Bradley~\cite{mainpaper}, as shown below, instances turned out being relatively easily solve where even the relatively simple construction heuristic obtains high quality solutions in little to no execution time. We then further investigated this behavior in more depth and found that a specially structured cost matrix due to the tree-based alignment procedure in \emph{ClustalW} often leads to edge-costs of $0$ between specific pairs in graph, inherently favouring the nature of the DNALA construction heuristic. 
+Although we chose instances of sizes comparable to the work of Bradley~\cite{mainpaper}, as shown below, instances turned out being relatively easy to solve where even the relatively simple construction heuristic obtains high quality solutions in little to no execution time. We then further investigated this behavior in more depth and found that a specially structured cost matrix due to the tree-based alignment procedure in \emph{ClustalW} often leads to edge-costs of $0$ between specific pairs in graph, inherently favouring the nature of the DNALA construction heuristic. 
 
 These test-cases can be found in the project under the folder \textit{data}:
 Sequence alignments for each test-case are stored in the files \textit{human\_data\_XX.fasta} where \textit{XX} denotes the size of the test-case.
@@ -53,7 +55,7 @@ We provide two preliminary methods to solve this problem which are used to bench
     \item An implementation of the DNALA algorithm as described in \cite{mainpaper} can be found in the \textit{algorithms} directory.
     We did implement the described randomness, but do not use multiple runs of the algorithm, but instead only run the algorithm for a testset once to determine its capability.
 
-    \item As DNALA is only a heuristic and is not guaranteed to find an optimal solution we furthermore use a maximum weighted matching provided by the package \textit{networkx} (\url{https://networkx.org/documentation/stable//index.html}) to compute an exact solution used for optimality gaps in benchmarking.
+    \item As DNALA is only a heuristic and is not guaranteed to find an optimal solution we furthermore use a maximum weighted matching implementation provided by the package \textit{networkx} (\url{https://networkx.org/documentation/stable//index.html}) to compute an exact solution used for optimality gaps in benchmarking.
 \end{itemize}
 
 \section{Genetic Algorithm}
@@ -63,7 +65,7 @@ The well-know genetic algorithm compononents are implemented as follows:
 \begin{itemize}
     \item \textbf{Solution representation}: A solution consists of $\frac{n}{2}$ pairs such that each node (sequence) appears in exactly one pair.
     \item \textbf{Fitness}: The fitness is just the sum of distances between pairs of points. 
-    This in fact also represents the value of a weighted matching the corresponding weighted matching.
+    This in fact also represents the value of the corresponding weighted matching.
     \item \textbf{Crossover}: Given a pair of individuals $M_i$ and $M_j$, we derive a successor individual $M_{i'}$ with the following procedure:
     \begin{enumerate}
     	\item Select a subset $M'_i \subset M_i$ of matchings from individual $M_i$, where each edge $e \in M_i$ is selected with a probability of $0.5$. 
@@ -77,7 +79,7 @@ Furthermore we used a tournament selection strategy with tournament size of $k=3
 
 \section{Ant Colony Optimization}
 At first we did not know how to solve the problem with ant colony optimization.
-But then we realized that a weighted matching in a complete graph is just a tour visiting every vertice where every second edge will have weight 0.
+But then we realized that a weighted matching in a complete graph is just a tour visiting every vertice, where every second edge will have weight 0.
 This was really convenient, as ant colony optimization is well-known to perform well on the TSP-problem.
 Furthermore there are a lot of implementations available, which provide ACO-methods to solve the TSP-problem.
 For our purposes it was enough to alter the implementation provided by the \textit{pants}-package (\url{https://pypi.org/project/ACO-Pants/}) in a way, such that we could solve the minimum weighted matching problem.
@@ -88,7 +90,7 @@ This means that at a specific point of the algorithm each ant has currently visi
 Now this path has either even or odd length.
 This means when an ant can chose its next edge there are two different strategies:
 \begin{itemize}
-    \item If the path until now has even length, then chose the usual strategy to select the next node to visit (pheromones in ACO with $\alpha$- and $\beta$-values).
+    \item If the path until now has even length, then choose the usual strategy to select the next node to visit (pheromones in ACO with $\alpha$- and $\beta$-values).
     \item If the path until now has odd length, then go to any not yet visited node.
     This resembles the fact that every other edge of the tour will have weight 0.
 \end{itemize}
@@ -102,7 +104,8 @@ While population based metaheuristics are usually great to identify high quality
 \section{Results \& Conclusion}
 To evaluate the described approaches, experiments with a set of $12$ differently sized instances were run for different kinds of algorithm configurations. 
 We used the optimality gap as a scale invariant performance measure describing the relative distance to the global optimum. 
-As for particularly large instances, some configurations did converge towards the global optimum all experiments were run with a wallclock time of $300 s$ and $5$ repetitions each for statistical stability. Execution times do not include preparation time of cost matrices, since they have been precomputed and stored for reuse.
+As for particularly large instances, some configurations did converge towards the global optimum.
+All experiments were run with a wallclock time of $300 s$ and $5$ repetitions each for statistical stability. Execution times do not include preparation time of cost matrices, since they have been precomputed and stored for reuse.
 
 \subsection{Comparison of GA, ACO and DNALA}
 
@@ -110,12 +113,11 @@ Table~\ref{tab:main} compares both the GA as well as the ACO to the DNALA baseli
 
 Main observations:
 \begin{itemize}
-	\item purely population-based metaheuristic approaches work quite well for moderate sized instances, but solution quality declines significantly with increasing instance sizes. While for smaller instances, the some instances could even solved to optimality, for large instances the gap increases even above $100\%$ optimality gap. 
+	\item Purely population-based metaheuristic approaches work quite well for moderate sized instances, but solution quality declines significantly with increasing instance sizes. While for smaller instances, some instances could even be solved to optimality, for large instances the gap increases even above $100\%$ optimality gap. 
 	\item Both approaches show the same behaviour with respect to the overall number of iterations conducted in the given period, where in smaller instances optimal solutions are obtained relatively fast and as the instance size increases, also the number of iterations until premature termination due to optimality increases. At some point, however, instances become more difficult and more expensive in terms of computational cost, such that the iteration count then steadily decreases, which in turn also affects solution quality. 
 	\item It can be observed that our GA does not suffer from premature convergence as the iteration where the best solution was obtained tends to be close to the overall iteration count. This suggests that more iterations could still improve the solution quality. 
-	\item local search generally improves quality significantly, allowing to solve even larger instances almost to optimality. However, iteration count drops to a level where our GA is basically just a \emph{fancy} random restart procedure. 
+	\item Local search generally improves quality significantly, allowing to solve even larger instances almost to optimality. However, iteration count drops to a level where our GA is basically just a \emph{fancy} random restart procedure. 
 	\item The effectiveness of two-opt local search	backs up our observation of the biased instance generation procedure mentioned in Section~\ref{sec:test-data}, since this simple neighborhood is able to identify the respective pairs of minimal cost easily. Furthermore, DNALA + LS seems to be quite good combtination 
-	\item 
 \end{itemize}
 
 \begin{table}
@@ -169,13 +171,12 @@ DNALA & 10  &     1994 &     1994 &   0.00 &   0.00 &          - &              
 \bottomrule
 \end{tabular}%
 }
-\label{tab:main}
-\caption{Comparison of GA and ACO against the DNALA baseline in $12$ different instances.}
+\caption{Comparison of GA and ACO against the DNALA baseline in $12$ different instances.}\label{tab:main}
 \end{table}
 
 
 \subsection{Comparison of GA Mutation Operators}
-The previous section showed that our GA is not subject to premature convergence. However, the effectiveness of the two-opt neighbourhood structure and the fact that improvements occur frequently in the last iterations, we suspected that our GA was actually a multi-solution, random-neighbour local search. To this end, we compared the random two-opt move mutation operator against the best two-opt move one. Table~\ref{tab:mutation-operator} compares median values for fitness, optimality gap execution time and iteration characteristics for both types for moderate and large instance types. 
+The previous section showed that our GA is not subject to premature convergence. However, the effectiveness of the two-opt neighbourhood structure and the fact that improvements occur frequently in the last iterations, we suspected that our GA was actually a multi-solution, random-neighbour local search. To this end, we compared the random two-opt move mutation operator against the best two-opt move one. Table~\ref{tab:mutation-operator} compares median values for fitness, optimality gap, execution time and iteration characteristics for both types for moderate and large instance types. 
 
 Main observations:
 \begin{itemize}
@@ -214,12 +215,14 @@ Best  & 70  &  47234.00 &  47366.00 &   0.28 & 221.00 &     320.00 &            
 
 
 \subsection{Population Size}
-As the name might suggest, population size is obviously a crucial parameter in population-based metaheuristics. On the one hand, an increased population size allows fosters search diversity and so allows to cover more areas in the solution space at once, obviously increasing likelihood to identifying new promising regions. On the other hand, metaheuristics usually require lots of iterations to continuously improve the solution quality, which obviously is a major limiting factor for large population sizes. In Figure~\ref{fig:population} we compare the impact of different population sizes on the optimality gap over time in single executions on two different instances (usually we a time bucket average would be more appropriate for statistical stability, but we assumed this was beyond the scope if this exercise).
+As the name might suggest, population size is obviously a crucial parameter in population-based metaheuristics. On the one hand, an increased population size allows vaster search diversity and allows to cover more areas in the solution space at once, obviously increasing likelihood to identifying new promising regions. 
+On the other hand, metaheuristics usually require lots of iterations to continuously improve the solution quality, which obviously is a major limiting factor for large population sizes. 
+In Figure~\ref{fig:population} we compare the impact of different population sizes on the optimality gap over time in single executions on two different instances (usually a time bucket average would be more appropriate for statistical stability, but we assumed this was beyond the scope if this exercise).
 
 Main observations:
 \begin{itemize}
 	\item Too large population sizes inherently lead to increased computational costs, thus slowing down individual iterations, as can be observed in Figure~\ref{fig:population-b}
-	\item The increased population sizes, however, increases search diversity, thus may improve solution quality (compare again Figure~\ref{fig:population-b}). Of course this depends on the structure of the solution space, e.g. big-valley vs. widely distrusted.
+	\item The increased population sizes, however, increase search diversity, thus may improve solution quality (compare again Figure~\ref{fig:population-b}). Of course this depends on the structure of the solution space, e.g. big-valley vs. widely distrusted.
 	\item Independent of the population size, it can be observed that the GA tends to perform small steps towards improving solutions until convergence towards an (local or global) optimum sets in, while the ACO seems to require large periods to obtain improving solutions. This could be either an indicator for a suboptimal model or some hyper-parameter issue. In a more elaborated study, we would use for instance the R-package irace for proper parameter tuning. 
 \end{itemize}
 
@@ -268,7 +271,8 @@ The default mutation rate corresponds to $2/|V|$, multiplied by a tunable parame
 
 Main observations:
 \begin{itemize}
-	\item add something here....
+	\item We can clearly see that with too high mutation rate ($r=8$) the genetic algorithm does not converge to the optimum, whereas for $r=1$ and $r=4$ the performance is similar.
+	\item For ACO alpha=1 and beta=4 or beta=8 clearly outperforms all other parameter choices.
 \end{itemize}
 
  \begin{figure*}
@@ -289,16 +293,17 @@ Main observations:
             \label{fig:mean and std of net24}
         \end{subfigure}
         \caption
-        {\small Optimality gap over time for different population sizes on instances with $n=50$ and $n=100$ vertices. } 
+        {\small Optimality gap over time for different parameters with $n=50$ vertices. } 
         \label{fig:mean and std of nets}
     \end{figure*}
 
-
-todo add some experiments with different parameters for population size
-
+\section{Conclusion}
+We have seen two metaheuristic techniques to solve the minimum weighted matching problem, namely ACO and genetic algorithms.
+Both approaches performed similarly and converged to optimal solutions in appropriate times even for larger instances.
 
 \bibliographystyle{abbrv}
 \bibliography{main}
+
 
 \end{document}
   
