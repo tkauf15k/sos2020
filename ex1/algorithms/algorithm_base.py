@@ -15,6 +15,8 @@ class algorithm_base:
         self.start_time = 0
         self.stop_time = 0
         self.best_solution = None
+        self.overall_iterations = 0
+        self.best_iteration = 0
 
     @abstractmethod
     def solve(self, num_sequences, time_limit):
@@ -24,14 +26,15 @@ class algorithm_base:
         with open(output, 'w') as out_file:
             out_file.write("optimum={}\n".format(self.optimum))
             out_file.write("execution_time={},start_time={},stop_time={}\n".format(self.stop_time - self.start_time, self.start_time, self.stop_time))
+            out_file.write("best_iteration={},overall_iterations={}\n".format(self.best_iteration, self.overall_iterations))
             out_file.write(str(self.best_solution) + "\n")
 
             for t in self.trace:
                 (fitness, iteration, gap, delta, timestamp) = t
                 out_file.write('fitness={},iteration={},gap={},delta={},timestamp={}\n'.format(fitness, iteration, gap, delta, timestamp))
-        if output.endswith('.txt'):
-            pickle_path = output.replace('.txt', '.pickle')
-            pickle.dump(self, open(pickle_path, "wb"))
+        # if output.endswith('.txt'):
+        #     pickle_path = output.replace('.txt', '.pickle')
+        #     pickle.dump(self, open(pickle_path, "wb"))
 
     def prepare(self, num_sequences):
         input_path = "data/human_data_{}.fasta".format(num_sequences)
@@ -49,6 +52,7 @@ class algorithm_base:
         timestamp = timeit.default_timer()
         self.trace.append((fitness, iteration, gap, delta, timestamp))
         self.best_solution = solution
+        self.best_iteration = iteration
 
         print("fitness={}, iteration={}, gap={}, delta={}, execution-time={}".format(fitness, iteration, gap, delta, timestamp))
         return gap <= 0
@@ -61,4 +65,7 @@ class algorithm_base:
         self.overall_iterations = iterations
 
     def terminated(self, time_limit):
-        return timeit.default_timer() - self.start_time >= time_limit
+        if timeit.default_timer() - self.start_time >= time_limit:
+            print('terminated!')
+            return True
+        return False

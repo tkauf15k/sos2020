@@ -35,6 +35,7 @@ For an edge $e=\{u,v\}$ its weight $w(e)$ is just the distance between the seque
 In the next sections we describe our solution approaches and main results.
 
 \section{Test Data \& Preprocessing}
+\label{sec:test-data}
 As base set of data we chose DNA sequences from \url{https://www.kaggle.com/neelvasani/humandnadata} which consists of over 4000 human DNA sequences.
 In a next step we created multiple instances of different size by selecting 10-300 random samples of these sequences.
 Test-case sizes are always even, such that we do not have to bother about the leftover single sequence.
@@ -99,70 +100,128 @@ One might think that this construction of an algorithm to solve the minimum weig
 While population based metaheuristics are usually great to identify high quality solution components in widely distributed solution spaces, they tend to end up in suboptimal regions, where simple intensification procedures like local search heuristics can significantly improve the solution quality. To this end, it is so common that population based metaheuristics are combined with local search procedures that for genetic algorithms the term \emph{memetic algorithm} has been established in the literature. In this work, we used a relatively simple two-opt neighbourhood structure with a constant time neighbour evaluation scheme and a first-improvement step function to improve populations of both the ACO as well as the GA. 
 
 \section{Results \& Conclusion}
-As described above, we used a set of $12$ instances 
+To evaluate the described approaches, experiments with a set of $12$ differently sized instances were run for different kinds of algorithm configurations. 
+We used the optimality gap as a scale invariant performance measure describing the relative distance to the global optimum. 
+As for particularly large instances, some configurations did converge towards the global optimum all experiments were run with a wallclock time of $300 s$ and $5$ repetitions each for statistical stability. Execution times do not include preparation time of cost matrices, since they have been precomputed and stored for reuse.
 
-info:
-300s execution time
-optimality gap as scale invariant measure for distance to the optimum
+\subsection{Comparison of GA, ACO and DNALA}
 
-median execution time until termination
-median iteration until optimum was obtained 
+Table~\ref{tab:main} compares both the GA as well as the ACO to the DNALA baseline, where we show the median values, for the optimality gap, the execution time as well as the iteration where the best solution was obtained. 
 
-iterations are 0 indexed, so sometimes, just fyi
+Main observations:
+\begin{itemize}
+	\item purely population-based metaheuristic approaches work quite well for moderate sized instances, but solution quality declines significantly with increasing instance sizes. While for smaller instances, the some instances could even solved to optimality, for large instances the gap increases even above $100\%$ optimality gap. 
+	\item Both approaches show the same behaviour with respect to the overall number of iterations conducted in the given period, where in smaller instances optimal solutions are obtained relatively fast and as the instance size increases, also the number of iterations until premature termination due to optimality increases. At some point, however, instances become more difficult and more expensive in terms of computational cost, such that the iteration count then steadily decreases, which in turn also affects solution quality. 
+	\item It can be observed that our GA does not suffer from premature convergence as the iteration where the best solution was obtained tends to be close to the overall iteration count. This suggests that more iterations could still improve the solution quality. 
+	\item local search generally improves quality significantly, allowing to solve even larger instances almost to optimality. However, iteration count drops to a level where our GA is basically just a \emph{fancy} random restart procedure. 
+	\item The effectiveness of two-opt local search	backs up our observation of the biased instance generation procedure mentioned in Section~\ref{sec:test-data}, since this simple neighborhood is able to identify the respective pairs of minimal cost easily. Furthermore, DNALA + LS seems to be quite good combtination 
+	\item 
+\end{itemize}
 
 \begin{table}
 \centering
 \resizebox{\columnwidth}{!}{%
-\begin{tabular}{llr|rrrr|rrrr}
+\begin{tabular}{llr|rrrrr|rrrrr}
 \toprule
-   &     &          & \multicolumn{4}{|c|}{Without Local Search} & \multicolumn{4}{|c}{With Local Search} \\
-   &     &  Optimum &  Fitness &    Gap &   Time &  $I_{opt}$ &  Fitness &   Gap &   Time &  $I_{opt}$ \\
+   &     &          & \multicolumn{5}{|c|}{Without Local Search} & \multicolumn{5}{|c}{With Local Search} \\
+   &     &  Optimum &  Fitness &    Gap &   Time &  $I_{opt}$ &  $I_{total}$ &  Fitness &   Gap &   Time &  $I_{opt}$ &  $I_{total}$ \\
 ALG & n &          &          &        &        &            &          &       &        &            \\
 \midrule
-GA & 10  &     1994 &     1994 &   0.00 &   0.00 &          0 &     1994 &  0.00 &   0.00 &          0 \\
-   & 20  &    11758 &    11758 &   0.00 &   1.00 &         14 &    11758 &  0.00 &   0.00 &          0 \\
-   & 30  &    19032 &    19032 &   0.00 &   3.00 &         31 &    19032 &  0.00 &   1.00 &          0 \\
-   & 40  &    20892 &    20892 &   0.00 &   6.00 &         59 &    20892 &  0.00 &   3.00 &          0 \\
-   & 50  &    34198 &    34198 &   0.00 &  20.00 &        148 &    34198 &  0.00 &   5.00 &          0 \\
-   & 60  &    42382 &    42382 &   0.00 &  29.00 &        161 &    42382 &  0.00 &  12.00 &          1 \\
-   & 70  &    47234 &    47244 &   0.02 & 300.00 &        170 &    47234 &  0.00 &  18.00 &          1 \\
-   & 80  &    53538 &    54812 &   2.38 & 300.00 &        207 &    53538 &  0.00 &  19.00 &          2 \\
-   & 90  &    69731 &    69909 &   0.26 & 300.00 &        337 &    69731 &  0.00 &  25.00 &          2 \\
-   & 100 &    83495 &    92065 &  10.26 & 300.00 &        217 &    83495 &  0.00 &  62.00 &          4 \\
-   & 150 &   104772 &   178368 &  70.24 & 300.00 &        136 &   104772 &  0.00 & 225.00 &          7 \\
-   & 200 &   130178 &   315378 & 142.27 & 300.00 &        131 &   130820 &  0.49 & 300.00 &          8 \\
+GA & 10  &     1994 &     1994 &   0.00 &   0.00 &          1 &                  1 &     1994 &  0.00 &   0.00 &          0 &                  0 \\
+   & 20  &    11758 &    11758 &   0.00 &   0.00 &         13 &                 13 &    11758 &  0.00 &   0.00 &          0 &                  0 \\
+   & 30  &    19032 &    19032 &   0.00 &   2.00 &         33 &                 33 &    19032 &  0.00 &   1.00 &          0 &                  0 \\
+   & 40  &    20892 &    20892 &   0.00 &   5.00 &         54 &                 54 &    20892 &  0.00 &   3.00 &          0 &                  0 \\
+   & 50  &    34198 &    34198 &   0.00 &  18.00 &        124 &                124 &    34198 &  0.00 &   3.00 &          0 &                  0 \\
+   & 60  &    42382 &    44060 &   3.96 & 300.00 &        141 &               1795 &    42382 &  0.00 &  10.00 &          1 &                  1 \\
+   & 70  &    47234 &    47498 &   0.56 & 300.00 &        221 &               1744 &    47234 &  0.00 &  15.00 &          1 &                  1 \\
+   & 80  &    53538 &    53538 &   0.00 &  62.00 &        291 &                347 &    53538 &  0.00 &  23.00 &          2 &                  2 \\
+   & 90  &    69731 &    70489 &   1.09 & 300.00 &        477 &               1322 &    69731 &  0.00 &  36.00 &          2 &                  2 \\
+   & 100 &    83495 &    90825 &   8.78 & 300.00 &        314 &                314 &    83495 &  0.00 &  56.00 &          3 &                  3 \\
+   & 150 &   104772 &   164686 &  57.19 & 300.00 &        141 &                141 &   104772 &  0.00 & 183.00 &          6 &                  6 \\
+   & 200 &   130178 &   285042 & 118.96 & 300.00 &        142 &                142 &   133848 &  2.82 & 300.00 &          7 &                  7 \\
    \midrule
-ACO & 10  &     1994 &     1994 &   0.00 &   0.00 &          0 &     1994 &  0.00 &   0.00 &          0 \\
-   & 20  &    11758 &    11758 &   0.00 &   0.00 &          0 &    11758 &  0.00 &   0.00 &          0 \\
-   & 30  &    19032 &    19032 &   0.00 &   0.00 &          2 &    19032 &  0.00 &   0.00 &          0 \\
-   & 40  &    20892 &    20892 &   0.00 &  10.00 &         88 &    20892 &  0.00 &   0.00 &          0 \\
-   & 50  &    34198 &    34320 &   0.36 & 300.00 &        280 &    34198 &  0.00 &   1.00 &          0 \\
-   & 60  &    42382 &    44310 &   4.55 & 300.00 &        317 &    42382 &  0.00 &   2.00 &          0 \\
-   & 70  &    47234 &    51766 &   9.59 & 300.00 &        623 &    47234 &  0.00 &   3.00 &          0 \\
-   & 80  &    53538 &    60872 &  13.70 & 300.00 &        587 &    53538 &  0.00 &   4.00 &          0 \\
-   & 90  &    69731 &    82387 &  18.15 & 300.00 &        150 &    69731 &  0.00 &   6.00 &          0 \\
-   & 100 &    83495 &   107141 &  28.32 & 300.00 &        257 &    83495 &  0.00 &  42.00 &          5 \\
-   & 150 &   104772 &   150908 &  44.03 & 300.00 &         68 &   107586 &  2.69 & 300.00 &         24 \\
-   & 200 &   130178 &   217644 &  67.19 & 300.00 &         36 &   170190 & 30.74 & 300.00 &         17 \\
+ACO & 10  &     1994 &     1994 &   0.00 &   0.00 &          0 &                  0 &     1994 &  0.00 &   0.00 &          0 &                  0 \\
+   & 20  &    11758 &    11758 &   0.00 &   0.00 &          0 &                  0 &    11758 &  0.00 &   0.00 &          0 &                  0 \\
+   & 30  &    19032 &    19032 &   0.00 &   0.00 &          1 &                  1 &    19032 &  0.00 &   0.00 &          0 &                  0 \\
+   & 40  &    20892 &    20892 &   0.00 &   8.00 &         89 &                 89 &    20892 &  0.00 &   0.00 &          0 &                  0 \\
+   & 50  &    34198 &    34280 &   0.24 & 300.00 &       1380 &               1856 &    34198 &  0.00 &   1.00 &          0 &                  0 \\
+   & 60  &    42382 &    45370 &   7.05 & 300.00 &        326 &               1358 &    42382 &  0.00 &   1.00 &          0 &                  0 \\
+   & 70  &    47234 &    50798 &   7.55 & 300.00 &        361 &               1271 &    47234 &  0.00 &   2.00 &          0 &                  0 \\
+   & 80  &    53538 &    60098 &  12.25 & 300.00 &        684 &                775 &    53538 &  0.00 &   3.00 &          0 &                  0 \\
+   & 90  &    69731 &    83165 &  19.27 & 300.00 &        500 &                598 &    69731 &  0.00 &   5.00 &          0 &                  0 \\
+   & 100 &    83495 &   107569 &  28.83 & 300.00 &        428 &                512 &    83495 &  0.00 &  22.00 &          4 &                  4 \\
+   & 150 &   104772 &   157702 &  50.52 & 300.00 &         57 &                194 &   108990 &  4.03 & 300.00 &         18 &                 32 \\
+   & 200 &   130178 &   218002 &  67.46 & 300.00 &         49 &                125 &   171176 & 31.49 & 300.00 &         20 &                 24 \\
    \midrule
-DNALA & 10  &     1994 &     1994 &   0.00 &   0.00 &          0 &     1994 &  0.00 &   0.00 &          1 \\
-   & 20  &    11758 &    11758 &   0.00 &   0.00 &          0 &    11758 &  0.00 &   0.00 &          1 \\
-   & 30  &    19032 &    19032 &   0.00 &   0.00 &          0 &    19032 &  0.00 &   0.00 &          1 \\
-   & 40  &    20892 &    22066 &   5.62 &   0.00 &          0 &    21164 &  1.30 &   0.00 &          1 \\
-   & 50  &    34198 &    35336 &   3.33 &   0.00 &          0 &    34198 &  0.00 &   0.00 &          1 \\
-   & 60  &    42382 &    44666 &   5.39 &   0.00 &          0 &    42890 &  1.20 &   0.00 &          1 \\
-   & 70  &    47234 &    47252 &   0.04 &   0.00 &          0 &    47244 &  0.02 &   0.00 &          1 \\
-   & 80  &    53538 &    55448 &   3.57 &   0.00 &          0 &    53538 &  0.00 &   0.00 &          1 \\
-   & 90  &    69731 &    71779 &   2.94 &   0.00 &          0 &    69747 &  0.02 &   0.00 &          1 \\
-   & 100 &    83495 &    86513 &   3.61 &   0.00 &          0 &    85293 &  2.15 &   0.00 &          1 \\
-   & 150 &   104772 &   105824 &   1.00 &   0.00 &          0 &   104940 &  0.16 &   0.00 &          1 \\
-   & 200 &   130178 &   134640 &   3.43 &   0.00 &          0 &   130194 &  0.01 &   0.00 &          1 \\
+DNALA & 10  &     1994 &     1994 &   0.00 &   0.00 &          - &                  - &     1994 &  0.00 &   0.00 &          - &                  - \\
+   & 20  &    11758 &    11758 &   0.00 &   0.00 &          - &                  - &    11758 &  0.00 &   0.00 &          - &                  - \\
+   & 30  &    19032 &    19032 &   0.00 &   0.00 &          - &                  - &    19032 &  0.00 &   0.00 &          - &                  - \\
+   & 40  &    20892 &    22066 &   5.62 &   0.00 &          - &                  - &    21164 &  1.30 &   0.00 &          - &                  - \\
+   & 50  &    34198 &    35336 &   3.33 &   0.00 &          - &                  - &    34198 &  0.00 &   0.00 &          - &                  - \\
+   & 60  &    42382 &    44666 &   5.39 &   0.00 &          - &                  - &    42890 &  1.20 &   0.00 &          - &                  - \\
+   & 70  &    47234 &    47252 &   0.04 &   0.00 &          - &                  - &    47244 &  0.02 &   0.00 &          - &                  - \\
+   & 80  &    53538 &    55448 &   3.57 &   0.00 &          - &                  - &    53538 &  0.00 &   0.00 &          - &                  - \\
+   & 90  &    69731 &    71779 &   2.94 &   0.00 &          - &                  - &    69747 &  0.02 &   0.00 &          - &                  - \\
+   & 100 &    83495 &    86513 &   3.61 &   0.00 &          - &                  - &    85293 &  2.15 &   0.00 &          - &                  - \\
+   & 150 &   104772 &   105824 &   1.00 &   0.00 &          - &                  - &   104940 &  0.16 &   0.00 &          - &                  - \\
+   & 200 &   130178 &   134640 &   3.43 &   0.00 &          - &                  - &   130194 &  0.01 &   0.00 &          - &                  - \\
 
 \bottomrule
 \end{tabular}%
 }
+\label{tab:main}
+\caption{Comparison of GA and ACO against the DNALA baseline in $12$ different instances.}
 \end{table}
 
+
+\subsection{Comparison of GA Mutation Operators}
+The previous section showed that our GA is not subject to premature convergence. However, the effectiveness of the two-opt neighbourhood structure and the fact that improvements occur frequently in the last iterations, we suspected that our GA was actually a multi-solution, random-neighbour local search. To this end, we compared the random two-opt move mutation operator against the best two-opt move one. Table~\ref{tab:mutation-operator} compares median values for fitness, optimality gap execution time and iteration characteristics for both types for moderate and large instance types. 
+
+Main observations:
+\begin{itemize}
+	\item The randomized approach general performs quite similarly, however, tends to require more iterations for comparable solution qualities (e.g. $n=70$)
+	\item For smaller instances, the locally-improving moves seem to be slightly advantageous in terms of conversation pace. 
+	\item As the instance size increases, the effect of small locally-improving moves seem to vanish and both quality as well as iteration characteristics seem to align. 
+\end{itemize}
+
+\begin{table}
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llr|rrrrr}
+\toprule
+      &     &   Optimum &   Fitness &    Gap &   Time &   $I_{opt}$ &  $I_{total}$  \\
+type & n &           &           &        &        &            &                    \\
+\midrule
+Random & 70  &  47234.00 &  47371.00 &   0.29 & 300.00 &     278.50 &            2203.50 \\
+      & 80  &  53538.00 &  55116.00 &   2.95 & 300.00 &     564.00 &            1650.00 \\
+      & 90  &  69731.00 &  70490.00 &   1.09 & 300.00 &     599.00 &            1012.00 \\
+      & 100 &  83495.00 &  94405.00 &  13.07 & 300.00 &     501.00 &             629.50 \\
+      & 150 & 104772.00 & 180576.00 &  72.35 & 300.00 &     149.00 &             149.00 \\
+      & 200 & 130178.00 & 280278.00 & 115.30 & 300.00 &     142.50 &             142.50 \\
+         \midrule
+Best  & 70  &  47234.00 &  47366.00 &   0.28 & 221.00 &     320.00 &            1523.50 \\
+      & 80  &  53538.00 &  53538.00 &   0.00 &  88.00 &     295.50 &             364.50 \\
+      & 90  &  69731.00 &  71061.00 &   1.91 & 300.00 &     486.00 &            1492.50 \\
+      & 100 &  83495.00 &  89561.00 &   7.27 & 300.00 &     401.50 &            1002.50 \\
+      & 150 & 104772.00 & 192572.00 &  83.80 & 300.00 &     135.50 &             135.50 \\
+      & 200 & 130178.00 & 279480.00 & 114.69 & 300.00 &     143.50 &             143.50 \\
+\bottomrule
+\end{tabular}%
+}
+\label{tab:mutation-operator}
+\caption{Comparison of the random and best two-opt move in the GA mutation operator.}
+\end{table}
+
+
+\subsection{Population Size}
+As the name might suggest, population size is obviously a crucial parameter in population-based metaheuristics. On the one hand, an increased population size allows fosters search diversity and so allows to cover more areas in the solution space at once, obviously increasing likelihood to identifying new promising regions. On the other hand, metaheuristics usually require lots of iterations to continuously improve the solution quality, which obviously is a major limiting factor for large population sizes. In Figure~\ref{fig:population} we compare the impact of different population sizes on the optimality gap over time in single executions on two different instances (usually we a time bucket average would be more appropriate for statistical stability, but we assumed this was beyond the scope if this exercise).
+
+Main observations:
+\begin{itemize}
+	\item Too large population sizes inherently lead to increased computational costs, thus slowing down individual iterations, as can be observed in Figure~\ref{fig:population-b}
+	\item The increased population sizes, however, increases search diversity, thus may improve solution quality (compare again Figure~\ref{fig:population-b}). Of course this depends on the structure of the solution space, e.g. big-valley vs. widely distrusted.
+	\item Independent of the population size, it can be observed that the GA tends to perform small steps towards improving solutions until convergence towards an (local or global) optimum sets in, while the ACO seems to require large periods to obtain improving solutions. This could be either an indicator for a suboptimal model or some hyper-parameter issue. In a more elaborated study, we would use for instance the R-package irace for proper parameter tuning. 
+\end{itemize}
 
   \begin{figure*}
         \centering
@@ -171,7 +230,7 @@ DNALA & 10  &     1994 &     1994 &   0.00 &   0.00 &          0 &     1994 &  0
             \includegraphics[width=\textwidth]{figures/ga_50_population_comparison.pdf}
             \caption%
             {{\small }}    
-            \label{fig:mean and std of net14}
+            \label{fig:population-a}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.475\textwidth}  
@@ -179,7 +238,7 @@ DNALA & 10  &     1994 &     1994 &   0.00 &   0.00 &          0 &     1994 &  0
             \includegraphics[width=\textwidth]{figures/ga_100_population_comparison.pdf}
             \caption%
             {{\small }}     
-            \label{fig:mean and std of net24}
+            \label{fig:population-b}
         \end{subfigure}
         \vskip\baselineskip
         \begin{subfigure}[b]{0.475\textwidth}   
@@ -187,7 +246,7 @@ DNALA & 10  &     1994 &     1994 &   0.00 &   0.00 &          0 &     1994 &  0
             \includegraphics[width=\textwidth]{figures/aco_50_population_comparison.pdf}
             \caption%
             {{\small }}      
-            \label{fig:mean and std of net34}
+            \label{fig:population-c}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.475\textwidth}   
@@ -195,15 +254,22 @@ DNALA & 10  &     1994 &     1994 &   0.00 &   0.00 &          0 &     1994 &  0
             \includegraphics[width=\textwidth]{figures/aco_100_population_comparison.pdf}
             \caption%
             {{\small }}    
-            \label{fig:mean and std of net44}
+            \label{fig:population-d}
         \end{subfigure}
         \caption
         {\small Optimality gap over time for different population sizes on instances with $n=50$ and $n=100$ vertices. } 
-        \label{fig:mean and std of nets}
+        \label{fig:population}
     \end{figure*}
 
 
+\subsection{Hyper-parameters}
+In addition to some manual tweaking of hyper-parameters, we performed a very limited comparison of selected hyper-parameters of both the GA and the ACO. 
+The default mutation rate corresponds to $2/|V|$, multiplied by a tunable parameter $r \in \{1,4,8\}$. 
 
+Main observations:
+\begin{itemize}
+	\item add something here....
+\end{itemize}
 
  \begin{figure*}
         \centering
