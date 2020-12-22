@@ -62,7 +62,7 @@ So for each constraint we can compute its penalty value at patch $x,y\in\mathbb{
 This penalty value is $C(x,y)\cdot d$ for constraints $C(x,y)<0$ and a constant $d$.
 For example for constraint 1 we have $(x^2+y^2-6000)\cdot d$ as penalty value if $x^2+y^2\ge 6000$.
 Furthermore we wanted penalty values to be between 0 and 1, so we chose constants $d$ appropriately.
-So for example for constraint 1 we set $d:=\frac{1}{4000}$ as $C(x,y)=x^2+y^2-6000$ can be as big as $4000$ for $x=y=100$.
+So for example for constraint 1 we set $d:=\frac{1}{14000}$ as $C(x,y)=x^2+y^2-6000$ can be as big as $14000$ for $x=y=100$.
 
 We then add these penalty values at position $(x,y)$ to the value of the patch at position $(x,y)$ if the selected contraint is violated at position $(x,y)$.
 This, of course, is only done if penalization is selected as constraint handling method.

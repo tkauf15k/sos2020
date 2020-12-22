@@ -250,6 +250,7 @@ to update-particle-positions
     ]
 
     [
+       ; if we are using the penalization method the fitness is already appropriate for all the patches
        ; face in the direction of my velocity
        facexy (xcor + vx) (ycor + vy)
        ; and move forward by the magnitude of my velocity
@@ -367,8 +368,8 @@ end
 
 ; Penalty for constraint x^2 + y^2 < 6000
 to-report constrain_1_penalty [x y]
-  ; maximum violation is 100*100-6000=4000, so scale with 1/4000
-  report max(list 0 ((x ^ 2 + y ^ 2 - 6000) * (1 / 4000)))
+  ; maximum violation is 100*100+100*100-6000=14000, so scale with 1/14000
+  report max(list 0 ((x ^ 2 + y ^ 2 - 6000) * (1 / 14000)))
 end
 
 ; Implementation of penalty for constraint x^2 + y^2 < 9000 and x^2 + y^2 > 4000
@@ -378,8 +379,8 @@ to-report constrain_2_penalty [x y]
   [
     ifelse (x ^ 2 + y ^ 2 >= 9000)
     [
-      ; maximum violation here 100*100-9000=1000, so scale with 1/1000
-      report max(list 0 ((x ^ 2 + y ^ 2 - 9000) * (1 / 1000)))
+      ; maximum violation here 100*100+100*100-9000=11000, so scale with 1/1000
+      report max(list 0 ((x ^ 2 + y ^ 2 - 9000) * (1 / 11000)))
     ]
     [
       ; here x^2 + y^2 <= 4000, maximum violation is 4000, so scale with 1/4000
@@ -516,7 +517,7 @@ population-size
 population-size
 1
 100
-26.0
+30.0
 1
 1
 NIL
@@ -603,7 +604,7 @@ particle-speed-limit
 particle-speed-limit
 1
 20
-4.0
+5.0
 1
 1
 NIL
@@ -770,7 +771,7 @@ CHOOSER
 Constraint
 Constraint
 "Example" "Constraint 1" "Constraint 2" "Constraint 3"
-3
+2
 
 PLOT
 10
