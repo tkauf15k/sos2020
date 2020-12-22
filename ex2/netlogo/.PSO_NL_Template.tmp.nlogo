@@ -250,6 +250,7 @@ to update-particle-positions
     ]
 
     [
+
        ; face in the direction of my velocity
        facexy (xcor + vx) (ycor + vy)
        ; and move forward by the magnitude of my velocity
