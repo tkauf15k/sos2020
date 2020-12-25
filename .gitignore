@@ -424,3 +424,5 @@ TSWLatexianTemp*
 
 # End of https://www.toptal.com/developers/gitignore/api/latex
 
+ex1/output/
+ex1/.idea/
