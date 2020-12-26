@@ -1,0 +1,17 @@
+export-world (word "./results/run-" trails-mode "-" particle-inertia "-" constraint_handling_method "-" Constraint "-" swarm-confidence "-" fitness_function "-" Constraints "-" population-size "-" particle-speed-limit "-" personal-confidence ".txt")
+
+["trails-mode" "None"]
+["particle-inertia" 0.33 0.66 1]
+["constraint_handling_method" "Penalty Method" "Rejection Method"]
+["Constraint" "Constraint 1" "Constraint 2" "Constraint 3"]
+["swarm-confidence" 0.1 1 1.5 2]
+["fitness_function" "Fitness function 1" "Fitness function 2" "Fitness function 3"]
+["Constraints" false true]
+["path-to-save" "filename.txt"]
+["highlight-mode" "Best found"]
+["population-size" 5 10 30 70 100]
+["particle-speed-limit" 1 5 10 20]
+["personal-confidence" 0.1 1 1.5 2]
+
+
+export-world (word "./results/run-" trails-mode "-" particle-inertia "-" swarm-confidence "-" fitness_function "-" population-size "-" particle-speed-limit "-" personal-confidence "-" behaviorspace-experiment-name "-" behaviorspace-run-number "-" ".txt")

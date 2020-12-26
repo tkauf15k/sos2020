@@ -517,7 +517,7 @@ population-size
 population-size
 1
 100
-30.0
+100.0
 1
 1
 NIL
@@ -532,7 +532,7 @@ personal-confidence
 personal-confidence
 0
 2
-1.0
+1.5
 0.1
 1
 NIL
@@ -547,7 +547,7 @@ swarm-confidence
 swarm-confidence
 0
 2
-0.8
+1.5
 0.1
 1
 NIL
@@ -562,7 +562,7 @@ particle-inertia
 particle-inertia
 0
 1.0
-0.66
+1.0
 0.01
 1
 NIL
@@ -604,7 +604,7 @@ particle-speed-limit
 particle-speed-limit
 1
 20
-5.0
+20.0
 1
 1
 NIL
@@ -656,7 +656,7 @@ CHOOSER
 fitness_function
 fitness_function
 "Example function" "Fitness function 1" "Fitness function 2" "Fitness function 3"
-0
+3
 
 SWITCH
 10
@@ -665,7 +665,7 @@ SWITCH
 143
 Constraints
 Constraints
-0
+1
 1
 -1000
 
@@ -705,7 +705,7 @@ CHOOSER
 constraint_handling_method
 constraint_handling_method
 "Rejection Method" "Penalty Method"
-1
+0
 
 INPUTBOX
 320
@@ -771,7 +771,7 @@ CHOOSER
 Constraint
 Constraint
 "Example" "Constraint 1" "Constraint 2" "Constraint 3"
-2
+3
 
 PLOT
 10
@@ -1076,10 +1076,228 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.1.1
+NetLogo 6.2.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
+<experiments>
+  <experiment name="experiment" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup
+export-world (word "./init/run-" trails-mode "-" particle-inertia "-" constraint_handling_method "-" Constraint "-" swarm-confidence "-" fitness_function "-" Constraints "-" population-size "-" particle-speed-limit "-" personal-confidence ".txt")</setup>
+    <go>iterate</go>
+    <final>export-world (word "./results/run-" trails-mode "-" particle-inertia "-" swarm-confidence "-" fitness_function "-" population-size "-" particle-speed-limit "-" personal-confidence "-" behaviorspace-experiment-name "-" behaviorspace-run-number "-" ".txt")</final>
+    <exitCondition>iterations &gt;= 100</exitCondition>
+    <metric>global-best-val</metric>
+    <enumeratedValueSet variable="trails-mode">
+      <value value="&quot;None&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-inertia">
+      <value value="0.33"/>
+      <value value="0.66"/>
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="swarm-confidence">
+      <value value="0.1"/>
+      <value value="1"/>
+      <value value="1.5"/>
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="fitness_function">
+      <value value="&quot;Fitness function 1&quot;"/>
+      <value value="&quot;Fitness function 2&quot;"/>
+      <value value="&quot;Fitness function 3&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Constraints">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="path-to-save">
+      <value value="&quot;filename.txt&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="highlight-mode">
+      <value value="&quot;Best found&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="population-size">
+      <value value="5"/>
+      <value value="10"/>
+      <value value="30"/>
+      <value value="70"/>
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-speed-limit">
+      <value value="1"/>
+      <value value="5"/>
+      <value value="10"/>
+      <value value="20"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="personal-confidence">
+      <value value="0.1"/>
+      <value value="1"/>
+      <value value="1.5"/>
+      <value value="2"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="unconstrained" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup
+export-world (word "./init/run-" trails-mode "-" particle-inertia "-" constraint_handling_method "-" Constraint "-" swarm-confidence "-" fitness_function "-" Constraints "-" population-size "-" particle-speed-limit "-" personal-confidence ".txt")</setup>
+    <go>iterate</go>
+    <final>export-world (word "./results/run-" trails-mode "-" particle-inertia "-" swarm-confidence "-" fitness_function "-" population-size "-" particle-speed-limit "-" personal-confidence "-" behaviorspace-experiment-name "-" behaviorspace-run-number "-" ".txt")</final>
+    <exitCondition>iterations &gt;= 100</exitCondition>
+    <metric>global-best-val</metric>
+    <enumeratedValueSet variable="trails-mode">
+      <value value="&quot;None&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-inertia">
+      <value value="0.33"/>
+      <value value="0.66"/>
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="swarm-confidence">
+      <value value="0.1"/>
+      <value value="1"/>
+      <value value="1.5"/>
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="fitness_function">
+      <value value="&quot;Fitness function 1&quot;"/>
+      <value value="&quot;Fitness function 2&quot;"/>
+      <value value="&quot;Fitness function 3&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Constraints">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="path-to-save">
+      <value value="&quot;filename.txt&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="highlight-mode">
+      <value value="&quot;Best found&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="population-size">
+      <value value="5"/>
+      <value value="10"/>
+      <value value="30"/>
+      <value value="70"/>
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-speed-limit">
+      <value value="1"/>
+      <value value="5"/>
+      <value value="10"/>
+      <value value="20"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="personal-confidence">
+      <value value="0.1"/>
+      <value value="1"/>
+      <value value="1.5"/>
+      <value value="2"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="constrained" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup
+export-world (word "./init/run-" trails-mode "-" particle-inertia "-" constraint_handling_method "-" Constraint "-" swarm-confidence "-" fitness_function "-" Constraints "-" population-size "-" particle-speed-limit "-" personal-confidence ".txt")</setup>
+    <go>iterate</go>
+    <final>export-world (word "./results/run-" trails-mode "-" particle-inertia "-" swarm-confidence "-" fitness_function "-" population-size "-" particle-speed-limit "-" personal-confidence "-" behaviorspace-experiment-name "-" behaviorspace-run-number "-" ".txt")</final>
+    <exitCondition>iterations &gt;= 100</exitCondition>
+    <metric>global-best-val</metric>
+    <enumeratedValueSet variable="trails-mode">
+      <value value="&quot;None&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-inertia">
+      <value value="0.33"/>
+      <value value="0.66"/>
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="swarm-confidence">
+      <value value="0.5"/>
+      <value value="1"/>
+      <value value="1.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="fitness_function">
+      <value value="&quot;Fitness function 1&quot;"/>
+      <value value="&quot;Fitness function 2&quot;"/>
+      <value value="&quot;Fitness function 3&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Constraints">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="constraint_handling_method">
+      <value value="&quot;Penalty Method&quot;"/>
+      <value value="&quot;Rejection Method&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Constraint">
+      <value value="&quot;Constraint 1&quot;"/>
+      <value value="&quot;Constraint 2&quot;"/>
+      <value value="&quot;Constraint 3&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="path-to-save">
+      <value value="&quot;filename.txt&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="highlight-mode">
+      <value value="&quot;Best found&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="population-size">
+      <value value="30"/>
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-speed-limit">
+      <value value="10"/>
+      <value value="20"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="personal-confidence">
+      <value value="0.5"/>
+      <value value="1"/>
+      <value value="1.5"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="unconstrained-new" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup
+export-world (word "./init/run-" trails-mode "-" particle-inertia "-" constraint_handling_method "-" Constraint "-" swarm-confidence "-" fitness_function "-" Constraints "-" population-size "-" particle-speed-limit "-" personal-confidence ".txt")</setup>
+    <go>iterate</go>
+    <final>export-world (word "./results/run-" trails-mode "-" particle-inertia "-" swarm-confidence "-" fitness_function "-" population-size "-" particle-speed-limit "-" personal-confidence "-" behaviorspace-experiment-name "-" behaviorspace-run-number "-" ".txt")</final>
+    <exitCondition>iterations &gt;= 100</exitCondition>
+    <metric>global-best-val</metric>
+    <enumeratedValueSet variable="trails-mode">
+      <value value="&quot;None&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-inertia">
+      <value value="0.33"/>
+      <value value="0.66"/>
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="swarm-confidence">
+      <value value="0.5"/>
+      <value value="1"/>
+      <value value="1.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="fitness_function">
+      <value value="&quot;Fitness function 1&quot;"/>
+      <value value="&quot;Fitness function 2&quot;"/>
+      <value value="&quot;Fitness function 3&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Constraints">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="path-to-save">
+      <value value="&quot;filename.txt&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="highlight-mode">
+      <value value="&quot;Best found&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="population-size">
+      <value value="10"/>
+      <value value="30"/>
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-speed-limit">
+      <value value="10"/>
+      <value value="20"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="personal-confidence">
+      <value value="0.5"/>
+      <value value="1"/>
+      <value value="1.5"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default
