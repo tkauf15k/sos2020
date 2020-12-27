@@ -29,6 +29,11 @@ turtles-own
   personal-best-val   ; value of personal best
   personal-best-x     ; x coord. of personal best
   personal-best-y     ; x coord. of personal best
+
+  distance-to-optimum
+
+  turtle-mean-distance
+  neighbor-count
 ]
 
 ; global variables are to be defined here
@@ -45,6 +50,17 @@ globals
   max-y;           ; maximum y coordinate
 
   iterations       ; counter for iterations
+
+  avg-pos-x    ; average x position of turtles
+  avg-pos-y    ; average y position of turtles
+
+  avg-distance-to-optimum
+  distance-of-avg-to-optimum
+  avg-distance-of-turtles
+  avg-neighbor-count
+  lonely-turtles
+
+  optimum-found
 ]
 
 ; The function setup initilizes the search landscape and the agents
@@ -64,6 +80,7 @@ to setup
 
   update-highlight
   reset-ticks
+  set optimum-found False
 
 end
 
@@ -187,10 +204,35 @@ to iterate
 
   update-highlight
 
+  set avg-pos-x (mean [xcor] of turtles)
+  set avg-pos-y (mean [ycor] of turtles)
+
+  set distance-of-avg-to-optimum [distancexy avg-pos-x avg-pos-y] of true-best-patch
+  set avg-distance-to-optimum (mean [distance-to-optimum] of turtles)
+
+  ask turtles [
+    set turtle-mean-distance (mean [distance myself] of other turtles)
+  ]
+  set avg-distance-of-turtles mean [turtle-mean-distance] of turtles
+  let neighbor-list ([neighbor-count] of turtles with [neighbor-count > 0])
+
+  ifelse (empty? neighbor-list)
+  [set avg-neighbor-count 0]
+  [set avg-neighbor-count mean neighbor-list]
+
+  set lonely-turtles (length [neighbor-count] of turtles with [neighbor-count = 0])
+
   set iterations (iterations + 1)
 
   if global-best-val = [val] of true-best-patch
-    [ stop ]
+    [
+      set optimum-found True ;stop
+    ]
+
+  if iterations >= 100
+  [
+   stop
+  ]
 
   tick
 
@@ -199,6 +241,9 @@ end
 
 
 to update-particle-positions
+
+  let x_best [pxcor] of true-best-patch
+  let y_best [pycor] of true-best-patch
 
   ask turtles
   [
@@ -233,8 +278,6 @@ to update-particle-positions
     let x (xcor + vx)
     let y  (ycor + vy)
 
-
-
     ; The Rejection constraint handling is realized here:
     ; If a point violates a constraint, it is rejected
     ; and the velocity and position are reset to the backup values
@@ -256,6 +299,9 @@ to update-particle-positions
        ; and move forward by the magnitude of my velocity
        forward sqrt (vx * vx + vy * vy)
     ]
+
+    set distance-to-optimum (distancexy x_best y_best)
+    set neighbor-count (count turtles-on neighbors)
 
   ]
 
@@ -517,7 +563,7 @@ population-size
 population-size
 1
 100
-100.0
+25.0
 1
 1
 NIL
@@ -532,7 +578,7 @@ personal-confidence
 personal-confidence
 0
 2
-1.5
+0.5
 0.1
 1
 NIL
@@ -547,7 +593,7 @@ swarm-confidence
 swarm-confidence
 0
 2
-1.5
+1.0
 0.1
 1
 NIL
@@ -562,7 +608,7 @@ particle-inertia
 particle-inertia
 0
 1.0
-1.0
+0.66
 0.01
 1
 NIL
@@ -604,7 +650,7 @@ particle-speed-limit
 particle-speed-limit
 1
 20
-20.0
+10.0
 1
 1
 NIL
@@ -656,7 +702,7 @@ CHOOSER
 fitness_function
 fitness_function
 "Example function" "Fitness function 1" "Fitness function 2" "Fitness function 3"
-3
+2
 
 SWITCH
 10
@@ -665,7 +711,7 @@ SWITCH
 143
 Constraints
 Constraints
-1
+0
 1
 -1000
 
@@ -790,6 +836,89 @@ false
 "" ""
 PENS
 "default" 1.0 0 -5298144 true "" "plot global-best-val"
+
+PLOT
+1010
+10
+1325
+225
+Distance-To-Optimum
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -2674135 true "" "plot avg-distance-to-optimum"
+
+PLOT
+1010
+235
+1325
+455
+average-distance-of-turtles
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -5298144 true "" "plot avg-distance-of-turtles"
+
+PLOT
+1350
+10
+1665
+220
+avg-neighbor-count
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -2674135 true "" "plot avg-neighbor-count"
+
+PLOT
+1345
+235
+1665
+455
+lonely-turtles
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot lonely-turtles"
+
+MONITOR
+320
+510
+417
+555
+Optimum Found
+optimum-found
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -1295,6 +1424,53 @@ export-world (word "./init/run-" trails-mode "-" particle-inertia "-" constraint
       <value value="0.5"/>
       <value value="1"/>
       <value value="1.5"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="test" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup
+export-world (word "./init/run-" trails-mode "-" particle-inertia "-" constraint_handling_method "-" Constraint "-" swarm-confidence "-" fitness_function "-" Constraints "-" population-size "-" particle-speed-limit "-" personal-confidence ".txt")</setup>
+    <go>iterate</go>
+    <final>export-world (word "./results/run-" trails-mode "-" particle-inertia "-" swarm-confidence "-" fitness_function "-" population-size "-" particle-speed-limit "-" personal-confidence "-" behaviorspace-experiment-name "-" behaviorspace-run-number "-" ".txt")</final>
+    <exitCondition>iterations &gt;= 100</exitCondition>
+    <metric>global-best-val</metric>
+    <metric>true-best-patch</metric>
+    <metric>global-best-x</metric>
+    <metric>global-best-y</metric>
+    <enumeratedValueSet variable="trails-mode">
+      <value value="&quot;None&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-inertia">
+      <value value="0.66"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="swarm-confidence">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="fitness_function">
+      <value value="&quot;Fitness function 1&quot;"/>
+      <value value="&quot;Fitness function 2&quot;"/>
+      <value value="&quot;Fitness function 3&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Constraints">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="path-to-save">
+      <value value="&quot;filename.txt&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="highlight-mode">
+      <value value="&quot;Best found&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="population-size">
+      <value value="5"/>
+      <value value="10"/>
+      <value value="30"/>
+      <value value="70"/>
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-speed-limit">
+      <value value="10"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="personal-confidence">
+      <value value="1"/>
     </enumeratedValueSet>
   </experiment>
 </experiments>
