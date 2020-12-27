@@ -6,7 +6,7 @@
 ; Author: Abdel Aziz Taha
 ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+extensions [dbscan]
 
 
 ; The additional (customized) properties of the
@@ -37,6 +37,7 @@ turtles-own
   does-violate
   violation-repaired
   after-repair-violation
+  step-violation
 ]
 
 ; global variables are to be defined here
@@ -64,6 +65,8 @@ globals
   lonely-turtles
   violations
   optimum-found
+  step-violations
+  num-clusters
 ]
 
 ; The function setup initilizes the search landscape and the agents
@@ -223,11 +226,20 @@ to iterate
   [set avg-neighbor-count 0]
   [set avg-neighbor-count mean neighbor-list]
 
-  set lonely-turtles (length [neighbor-count] of turtles with [neighbor-count = 0])
 
   set violations (length [does-violate] of turtles with [does-violate = True])
+  set step-violations (length [step-violation ] of turtles with [step-violation = True])
 
   set iterations (iterations + 1)
+
+  let clusters dbscan:cluster-by-location turtles 2 5
+  let covered sum(map [x -> length x] clusters)
+  let single_clusters (population-size - covered)
+  set num-clusters ((length clusters) + single_clusters)
+
+
+  ; set lonely-turtles (length [neighbor-count] of turtles with [neighbor-count = 0]) ; neighborhood based
+  set lonely-turtles single_clusters ; cluster based
 
   if global-best-val = [val] of true-best-patch
     [
@@ -280,14 +292,27 @@ to update-particle-positions
     if (vy > particle-speed-limit) [ set vy particle-speed-limit ]
     if (vy < 0 - particle-speed-limit) [ set vy 0 - particle-speed-limit ]
 
-    let x (xcor + vx)
-    let y  (ycor + vy)
+    let x 0
+    let y 0
 
     ; The Rejection constraint handling is realized here:
     ; If a point violates a constraint, it is rejected
     ; and the velocity and position are reset to the backup values
 
-
+    ifelse (strict_reject)[
+      let saved_heading heading
+      let step_size sqrt (vx * vx + vy * vy)
+      facexy (xcor + vx) (ycor + vy)
+      forward step_size
+      set x xcor
+      set y ycor
+      forward (step_size * (-1))
+      set heading saved_heading
+    ]
+    [
+      set x (xcor + vx)
+      set y  (ycor + vy)
+    ]
 
     ifelse ( (violates x y) and (constraints = TRUE) and (constraint_handling_method = "Rejection Method") )
     [
@@ -304,6 +329,15 @@ to update-particle-positions
        facexy (xcor + vx) (ycor + vy)
        ; and move forward by the magnitude of my velocity
        forward sqrt (vx * vx + vy * vy)
+
+      ifelse ((violates xcor ycor) and (constraints = TRUE))
+      [
+         set step-violation True
+      ]
+      [
+        set step-violation False
+      ]
+
     ]
 
     ifelse ((violates xcor ycor) and (constraints = TRUE) and (constraint_handling_method = "Rejection Method"))
@@ -936,9 +970,9 @@ optimum-found
 11
 
 PLOT
-525
+1010
 480
-980
+1465
 680
 Violations
 NIL
@@ -951,7 +985,36 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plot violations"
+"default" 1.0 0 -8330359 true "" "plot violations"
+
+PLOT
+520
+480
+980
+685
+Number Of Clusters
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -13840069 true "" "plot num-clusters"
+
+SWITCH
+10
+510
+132
+543
+strict_reject
+strict_reject
+0
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
