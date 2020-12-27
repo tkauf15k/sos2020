@@ -34,6 +34,9 @@ turtles-own
 
   turtle-mean-distance
   neighbor-count
+  does-violate
+  violation-repaired
+  after-repair-violation
 ]
 
 ; global variables are to be defined here
@@ -59,7 +62,7 @@ globals
   avg-distance-of-turtles
   avg-neighbor-count
   lonely-turtles
-
+  violations
   optimum-found
 ]
 
@@ -222,6 +225,8 @@ to iterate
 
   set lonely-turtles (length [neighbor-count] of turtles with [neighbor-count = 0])
 
+  set violations (length [does-violate] of turtles with [does-violate = True])
+
   set iterations (iterations + 1)
 
   if global-best-val = [val] of true-best-patch
@@ -282,6 +287,8 @@ to update-particle-positions
     ; If a point violates a constraint, it is rejected
     ; and the velocity and position are reset to the backup values
 
+
+
     ifelse ( (violates x y) and (constraints = TRUE) and (constraint_handling_method = "Rejection Method") )
     [
        set vx -1 * vx_bak
@@ -289,7 +296,6 @@ to update-particle-positions
 
        set xcor x_bak
        set ycor y_bak
-
     ]
 
     [
@@ -299,6 +305,15 @@ to update-particle-positions
        ; and move forward by the magnitude of my velocity
        forward sqrt (vx * vx + vy * vy)
     ]
+
+    ifelse ((violates xcor ycor) and (constraints = TRUE) and (constraint_handling_method = "Rejection Method"))
+    [
+       set does-violate True
+    ]
+    [
+      set does-violate False
+    ]
+
 
     set distance-to-optimum (distancexy x_best y_best)
     set neighbor-count (count turtles-on neighbors)
@@ -759,7 +774,7 @@ INPUTBOX
 420
 420
 path-to-save
-filename.txt
+faulty
 1
 0
 String
@@ -919,6 +934,24 @@ optimum-found
 17
 1
 11
+
+PLOT
+525
+480
+980
+680
+Violations
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot violations"
 
 @#$#@#$#@
 ## WHAT IS IT?
