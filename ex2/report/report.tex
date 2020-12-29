@@ -15,6 +15,7 @@
 \usepackage{subcaption}
 \usepackage{mwe}
 \usepackage{amsmath,amssymb}
+\usepackage{subcaption}
 
 \begin{document}
 \maketitle
@@ -67,9 +68,187 @@ So for example for constraint 1 we set $d:=\frac{1}{14000}$ as $C(x,y)=x^2+y^2-6
 We then add these penalty values at position $(x,y)$ to the value of the patch at position $(x,y)$ if the selected contraint is violated at position $(x,y)$.
 This, of course, is only done if penalization is selected as constraint handling method.
 Due to this variant of implementation, we do not have to update anything in the \textit{update-particle-positions}, as fitness-functions at patches are already considering penalization by the selected constraint.
-\section{Experiments}
+\section{Experimental Setup \& Evaluation Metrics}
+In order to compare convergence behaviour, we use a fixed number of $200$ iterations, without any time limit. 
+We use the following metrics to capture characteristics of solutions:
+\begin{itemize}
+	\item \textbf{Fitness}: a value between 0 and 1
+	\item \textbf{Number of Clusters}: to get a feeling of the distribution of particles in the search space, we use the clustering algorithm of the netlogo plugin \emph{dbscan}, where cluster is constituted of at least three agents with a maximum distance of $5$. These values have been selected manually based on some manual tweaking and tuning. Figure~\ref{fig:clusters} illustrates a few clusters in an early iteration in a Schaffer optimization instance. With this metric, in combination with others, we aim to identify scenarios where agents split up into separate groups, converging towards different regions in the search space. We normalized the number of clusters by the population size, to foster comparability in plots. 
+	
+	\begin{figure}[h]
+	\centering
+		\includegraphics[width=5cm]{figures/clusters.png}
+		\label{fig:clusters}
+		\caption{Illustration of Clusters in a constrained Schwefel Function Optimization Instance.}
+	\end{figure}	
+	
+	\item \textbf{Average Distance to the Optimal Solution}: should be monotonically decreasing in convex functions. However, in rugged landscapes with several nearly optimal solutions may not necessarily decrease to $\approx 0$.
+	\item \textbf{Average Distance among Particles}: as a measure for the distribution of particles in the search space. Thus, in the beginning relatively high as particles are randomly scattered among the search space, bus should decrease continuously as particles strive towards the (single or few) global optima. In case this value is high, a disconnected, highly constrained search may be indicated. 
+	\item \textbf{Average Path Length}: average length of the paths of each particle throughout the entire execution
+		
+\end{itemize}
 
-\section{Results and Analysis}
+Finally, for statistically stable results, each configuration in our experiments was executed $15$ times, and metrics where obtained by the average of those executions.
+
+
+
+\section{Experiments and Analysis}
+%\subsection{Experiment 1: Strong Personal Focus}
+%\begin{figure}
+%	\centering
+%	\includegraphics[width=0.75\textwidth]{figures/ex1/ex1-1.pdf}
+%	\label{fig:ex1-1}
+%\end{figure}
+%\begin{figure}
+%	\centering
+%	\includegraphics[width=0.75\textwidth]{figures/ex1/ex1-2.pdf}
+%	\label{fig:ex1-2}
+%\end{figure}
+%
+%\begin{figure}
+%	\centering
+%	\includegraphics[width=0.75\textwidth]{figures/ex1/ex1-3.pdf}
+%	\label{fig:ex1-3}
+%\end{figure}
+%strong personal focus and scarce distribution in the beginning, hard to find neighbour that guides somewhere
+%in easier functions even small population sizes 
+%\begin{figure}
+%\begin{subfigure}[c]{0.5\textwidth}
+%\centering
+%\includegraphics[width=0.75\textwidth]{figures/ex1/f1.png}
+%\subcaption{F1}
+%\end{subfigure}
+%\begin{subfigure}[c]{0.5\textwidth}
+%\centering
+%\includegraphics[width=0.75\textwidth]{figures/ex1/f3.png}
+%\subcaption{F3}
+%\end{subfigure}
+%
+%\caption{Comparison of representative solutions for fitness function $1$ ($P=100$) and $3$ ($P=20$).}
+%
+%\end{figure}
+
+
+\subsection{Different Population Sizes}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.75\textwidth]{figures/ex2/ex2-1.pdf}
+	\label{fig:ex2-1}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.75\textwidth]{figures/ex2/ex2-2.pdf}
+	\label{fig:ex2-2}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.75\textwidth]{figures/ex2/ex2-3.pdf}
+	\label{fig:ex2-3}
+\end{figure}
+
+
+
+\subsection{Inertia}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\textwidth]{figures/ex3/ex3-3.pdf}
+	\label{fig:ex3-3}
+\end{figure}
+
+
+optimal solution found easily but some 
+
+longer ways, slower convergence of clusters and distance to optimum as well as 
+
+
+
+\subsection{Acceleration Coefficients}
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex4/ex4-1-20.pdf}
+	\label{fig:ex4-1-20}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex4/ex4-1-50.pdf}
+	\label{fig:ex4-1-50}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex4/ex4-2-20.pdf}
+	\label{fig:ex4-2-20}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex4/ex4-2-50.pdf}
+	\label{fig:ex4-2-50}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex4/ex4-3-20.pdf}
+	\label{fig:ex4-3-20}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex4/ex4-3-50.pdf}
+	\label{fig:ex4-3-50}
+\end{figure}
+
+\begin{figure}
+\begin{subfigure}[c]{0.5\textwidth}
+\centering
+\includegraphics[width=0.75\textwidth]{figures/ex4/ex4-03-17-f3.png}
+\subcaption{$c_s=0.3$, $c_p=1.7$}
+\end{subfigure}
+\begin{subfigure}[c]{0.5\textwidth}
+\centering
+\includegraphics[width=0.75\textwidth]{figures/ex4/ex4-17-03-f3.png}
+\subcaption{$c_s=1.7$, $c_p=0.3$}
+\end{subfigure}
+
+\caption{Comparison of representative solutions for fitness function $1$ ($P=100$) and $3$ ($P=20$).}
+
+\end{figure}
+
+
+
+
+\subsection{Speed Limit}
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex5/ex5-1.pdf}
+	\label{fig:ex5-1}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex5/ex5-2.pdf}
+	\label{fig:ex5-2}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex5/ex5-3.pdf}
+	\label{fig:ex5-3}
+\end{figure}
+
+
+\begin{figure}
+\begin{subfigure}[c]{0.5\textwidth}
+\centering
+\includegraphics[width=0.75\textwidth]{figures/ex5/f3-3.png}
+\subcaption{$V_{max}=3$}
+\end{subfigure}
+\begin{subfigure}[c]{0.5\textwidth}
+\centering
+\includegraphics[width=0.75\textwidth]{figures/ex5/f3-20.png}
+\subcaption{$V_{max}=20$}
+\end{subfigure}
+
+\caption{Comparison of representative solutions for fitness function $1$ ($P=100$) and $3$ ($P=20$).}
+
+\end{figure}
+
 
 \section{Conclusion}
 
