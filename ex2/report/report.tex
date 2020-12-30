@@ -254,18 +254,63 @@ Observations based on Figures~\ref{fig:ex4-1-20},\ref{fig:ex4-1-50},\ref{fig:ex4
 
 
 \subsection{Inertia}
+In the following experiment we studied the impact of the particle inertia on all functions with default values for other parameters: $P=30$, $c_s=1$, $c_p=1$ and $V_{max}=10$. 
+
+Observations:
+\begin{itemize}
+	\item It is again illustrated that for a reasonable parameter setting with a sufficiently a large population size, it seems to be rather easy to identify (nearly) optimal regions in the search space, although a too low inertia seems to slow down convergence. 
+	\item For high $\omega$ values larger fluctuations can be observed, simply cause it affects the magnitude of the velocity. This behaviour is also reflected in the path lengths being significantly larger than for smaller $\omega$ values. In combination with these, the relatively high distance to the optimum further suggests that we encounter some kind of stagnation behaviour, where particles continuously move in the search space, without achieving any significant progress (e.g. in Schwefel function, $\omega=1$ converges on average to some fitness $<1$, with the particle distance being still relatively high with lots of frequently changing clusters, which suggests that many particles are (relatively loosely) gathered around some suboptimal region without achieving any progress on the fitness, but cannot escape this region due to the high concentration of particles in this region. An illustrative example of such a situation is shown in Figure~\ref{fig:ex3-example}).
+	\item Medium value for $\omega$ seem to be most suitable and provide a good trade-off between fitness convergence as well as dampening fluctuations among clusters, i.e. we suspect that not too many particles get stuck in low-quality local optima, while it seems that the population can identify the optimum soon and guides a majority of particles towards this region. This is also illustrated by the average distance to the real optimum that smoothly converges. Throughout all functions it can be observed that $\omega=0.5$ shows a continuously slower increasing average path length, even slower than low omega values. Here, it is again important to stress the following: in more complex optimization problems, we would assume that such a behaviour can be observed rather on a region level than for \"particular optima\" as it seems to be the case for these functions.
+
+	
+\end{itemize}
 
 \begin{figure}
 	\centering
+	\includegraphics[width=1\textwidth]{figures/ex3/ex3-1.pdf}
+	\label{fig:ex3-1}
+	\caption{Metrics for Schaffer function for inertia comparison.}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex3/ex3-2.pdf}
+	\label{fig:ex3-2}
+	\caption{Metrics for Booth function for inertia comparison.}
+\end{figure}
+
+\begin{figure}
+	\centering
+<<<<<<< HEAD
 	\includegraphics[width=0.9\textwidth]{figures/ex3/ex3-3.pdf}
 	Caption
+=======
+	\includegraphics[width=1\textwidth]{figures/ex3/ex3-3.pdf}
+>>>>>>> daa0905f2c3ab06fe2359f5e3113171a41db247d
 	\label{fig:ex3-3}
+	\caption{Metrics for Schwefel function for inertia comparison.}
 \end{figure}
 
 
-optimal solution found easily but some 
+\begin{figure}
+\begin{subfigure}[c]{0.5\textwidth}
+\centering
+\includegraphics[width=0.75\textwidth]{figures/ex3/wrong-optimum-init.png}
+\subcaption{$c_s=0.3$, $c_p=1.7$}
+\label{fig:ex3-example-a}
+\end{subfigure}
+\begin{subfigure}[c]{0.5\textwidth}
+\centering
+\includegraphics[width=0.75\textwidth]{figures/ex3/wrong-optimum.png}
+\subcaption{$c_s=1.7$, $c_p=0.3$}
+\label{fig:ex3-example-b}
+\end{subfigure}
 
-longer ways, slower convergence of clusters and distance to optimum as well as 
+\caption{Comparison of a representative execution (\ref{fig:ex3-example-a}: the initial solution and \ref{fig:ex3-example-b}: the final solution after 100 iterations) with $\omega=1$ converging towards a suboptimal optimum.}
+\label{fig:ex3-example}
+
+\end{figure}
+
 
 \subsection{Speed Limit}
 \begin{figure}
