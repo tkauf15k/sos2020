@@ -16,6 +16,7 @@
 \usepackage{mwe}
 \usepackage{amsmath,amssymb}
 \usepackage{subcaption}
+\usepackage[section]{placeins}
 
 \begin{document}
 \maketitle
@@ -137,7 +138,7 @@ Finally, for statistically stable results, each configuration in our experiments
 %\caption{Comparison of representative solutions for fitness function $1$ ($P=100$) and $3$ ($P=20$).}
 %
 %\end{figure}
-
+\FloatBarrier
 \subsection{Different Population Sizes}
 In the first experiment we compare the impact of the population size on the convergence behaviour. 
 For each function, we compared three different population sizes with fixed parameters for the others (inertia $\omega=0.33$, swarm-confidence $c_s=1$, personal-confidence $c_p=1$ and particle-speed-limit $V_{max}=10$).
@@ -155,23 +156,23 @@ Observations based on Figures~\ref{fig:ex2-1},\ref{fig:ex2-2},\ref{fig:ex2-3}:
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.75\textwidth]{figures/ex2/ex2-1.pdf}
-	\caption{Metrics for Schaffer Function}
+	\caption{Population sizes: Metrics for Schaffer Function}
 	\label{fig:ex2-1}
 \end{figure}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.75\textwidth]{figures/ex2/ex2-2.pdf}
-	\caption{Metrics for Booth Function}
+	\caption{Population sizes: Metrics for Booth Function}
 	\label{fig:ex2-2}
 \end{figure}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.75\textwidth]{figures/ex2/ex2-3.pdf}
-	\caption{Metrics for Schwefel Function}
+	\caption{Population sizes: Metrics for Schwefel Function}
 	\label{fig:ex2-3}
 \end{figure}
 
-
+\FloatBarrier
 \subsection{Acceleration Coefficients}
 Based on our findings we proceeded with experiments concerning acceleration coefficients. 
 From manual tests and the previous experiment, we know that for larger populations our functions can be optimized quite easily with standard parameters, $c_s=1$, $c_p=1$ and $V_{max}=10$, so in this experiment we turned our focus on values off the mean (i.e. $1$) and tested all four combinations for the values $0.3$ and $1.7$ for medium and larger population sizes for each of the selected functions. 
@@ -199,41 +200,41 @@ Observations based on Figures~\ref{fig:ex4-1-20},\ref{fig:ex4-1-50},\ref{fig:ex4
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex4/ex4-1-20.pdf}
-	\caption{Metrics for Schaffer function and $P=20$}
+	\caption{Acceleration coefficients: Metrics for Schaffer function and $P=20$}
 	\label{fig:ex4-1-20}
 \end{figure}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex4/ex4-1-50.pdf}
-	\caption{Metrics for Schaffer function and $P=50$}
+	\caption{Acceleration coefficients: Metrics for Schaffer function and $P=50$}
 	\label{fig:ex4-1-50}
 \end{figure}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex4/ex4-2-20.pdf}
-	\caption{Metrics for Booth function and $P=20$}
+	\caption{Acceleration coefficients: Metrics for Booth function and $P=20$}
 	\label{fig:ex4-2-20}
 \end{figure}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex4/ex4-2-50.pdf}
-	\caption{Metrics for Booth function and $P=50$}
+	\caption{Acceleration coefficients: Metrics for Booth function and $P=50$}
 	\label{fig:ex4-2-50}
 \end{figure}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex4/ex4-3-20.pdf}
-	\caption{Metrics for Schwefel function and $P=20$}
+	\caption{Acceleration coefficients: Metrics for Schwefel function and $P=20$}
 	\label{fig:ex4-3-20}
 \end{figure}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex4/ex4-3-50.pdf}
-	\caption{Metrics for Schwefel function and $P=50$}
+	\caption{Acceleration coefficients: Metrics for Schwefel function and $P=50$}
 	\label{fig:ex4-3-50}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
 \begin{subfigure}[c]{0.5\textwidth}
 \centering
 \includegraphics[width=0.75\textwidth]{figures/ex4/ex4-03-17-f3.png}
@@ -252,7 +253,7 @@ Observations based on Figures~\ref{fig:ex4-1-20},\ref{fig:ex4-1-50},\ref{fig:ex4
 
 \end{figure}
 
-
+\FloatBarrier
 \subsection{Inertia}
 In the following experiment we studied the impact of the particle inertia on all functions with default values for other parameters: $P=30$, $c_s=1$, $c_p=1$ and $V_{max}=10$. 
 
@@ -261,38 +262,31 @@ Observations:
 	\item It is again illustrated that for a reasonable parameter setting with a sufficiently a large population size, it seems to be rather easy to identify (nearly) optimal regions in the search space, although a too low inertia seems to slow down convergence. 
 	\item For high $\omega$ values larger fluctuations can be observed, simply cause it affects the magnitude of the velocity. This behaviour is also reflected in the path lengths being significantly larger than for smaller $\omega$ values. In combination with these, the relatively high distance to the optimum further suggests that we encounter some kind of stagnation behaviour, where particles continuously move in the search space, without achieving any significant progress (e.g. in Schwefel function, $\omega=1$ converges on average to some fitness $<1$, with the particle distance being still relatively high with lots of frequently changing clusters, which suggests that many particles are (relatively loosely) gathered around some suboptimal region without achieving any progress on the fitness, but cannot escape this region due to the high concentration of particles in this region. An illustrative example of such a situation is shown in Figure~\ref{fig:ex3-example}).
 	\item Medium value for $\omega$ seem to be most suitable and provide a good trade-off between fitness convergence as well as dampening fluctuations among clusters, i.e. we suspect that not too many particles get stuck in low-quality local optima, while it seems that the population can identify the optimum soon and guides a majority of particles towards this region. This is also illustrated by the average distance to the real optimum that smoothly converges. Throughout all functions it can be observed that $\omega=0.5$ shows a continuously slower increasing average path length, even slower than low omega values. Here, it is again important to stress the following: in more complex optimization problems, we would assume that such a behaviour can be observed rather on a region level than for \"particular optima\" as it seems to be the case for these functions.
-
-	
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex3/ex3-1.pdf}
 	\label{fig:ex3-1}
-	\caption{Metrics for Schaffer function for inertia comparison.}
+	\caption{Inertia: Metrics for Schaffer function for inertia comparison.}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex3/ex3-2.pdf}
 	\label{fig:ex3-2}
-	\caption{Metrics for Booth function for inertia comparison.}
+	\caption{Inertia: Metrics for Booth function for inertia comparison.}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
 	\centering
-<<<<<<< HEAD
-	\includegraphics[width=0.9\textwidth]{figures/ex3/ex3-3.pdf}
-	Caption
-=======
 	\includegraphics[width=1\textwidth]{figures/ex3/ex3-3.pdf}
->>>>>>> daa0905f2c3ab06fe2359f5e3113171a41db247d
 	\label{fig:ex3-3}
-	\caption{Metrics for Schwefel function for inertia comparison.}
+	\caption{Inertia: Metrics for Schwefel function for inertia comparison.}
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[h!]
 \begin{subfigure}[c]{0.5\textwidth}
 \centering
 \includegraphics[width=0.75\textwidth]{figures/ex3/wrong-optimum-init.png}
@@ -311,26 +305,44 @@ Observations:
 
 \end{figure}
 
-
+\FloatBarrier
 \subsection{Speed Limit}
-\begin{figure}
+The next few experiments should illustrate the impact of particle speed limit on the behaviour of the algorithm with regards to convergence.
+Parameters used were $P=20,\omega=0.33,c_s=1,c_p=1$.
+We compared four different particle speed limits.
+
+The plots are illustrated in Figures~\ref{fig:ex5-1}-\ref{fig:ex5-3} and the main observations are:
+\begin{itemize}
+	\item For smaller speed-limit convergence to the global optimum is slower, but this has to be expected.
+	\item Furthermore also the number of clusters for smaller speed limits is higher. This is visible in the Schwefel function, where we have a lot of clusters, even after 100 iterations for $V_{\max}=3$.
+	\item Interestingly, the path length is not always longest for the highest speed limit.
+	\item Overall one could say, that the speed limit does not have that much of an impact on the Schaffer and Booth function, whereas too low speed limits lead to a lot of scattered particles in the search space for the Schwefel function.
+	But upon closer look, we can also see that some suboptimal speed limits lead to early convergence, not leading to the global optimum.
+	This is also illustrated in Figure~\ref{fig:ex5comp}, where the search space for the Schwefel function is illustrated after 100 iterations.
+	For $V_{\max}=3$ we can see a lot of scattered particles stuck in different local optima, whereas for $V_{\max}=20$ all particles are stuck in one single local optimum.
+\end{itemize}
+
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex5/ex5-1.pdf}
+	\caption{Speed limit: Metrics for Schaffer function.}
 	\label{fig:ex5-1}
 \end{figure}
-\begin{figure}
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex5/ex5-2.pdf}
+	\caption{Speed limit: Metrics for Booth function.}
 	\label{fig:ex5-2}
 \end{figure}
-\begin{figure}
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex5/ex5-3.pdf}
+	\caption{Speed limit: Metrics for Schwefel function.}
 	\label{fig:ex5-3}
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[h!]
 \begin{subfigure}[c]{0.5\textwidth}
 \centering
 \includegraphics[width=0.75\textwidth]{figures/ex5/f3-3.png}
@@ -341,41 +353,98 @@ Observations:
 \includegraphics[width=0.75\textwidth]{figures/ex5/f3-20.png}
 \subcaption{$V_{max}=20$}
 \end{subfigure}
-
 \caption{Comparison of representative solutions for fitness function $1$ ($P=100$) and $3$ ($P=20$).}
-
+\label{fig:ex5comp}
 \end{figure}
 
+\FloatBarrier
 \subsection{Constraint Handling}
 Our last conducted experiment compares the two constraint handling methods, namely penalty and rejection.
 For this we try out each of the $3\cdot 3=9$ combinations of fitness function and constraints and compare constraint handling by rejection and penalty.
-The parameters for all experiments are particle-inertia$=0.33$, swarm-confidence$=1$, personal-confidence$=1$, particle-speed-limit$=10$ and population-size$=50$.
+The parameters for all experiments are $P=50,c_s=1,c_p=1,V_{\max}=10,\omega=0.33$.
+All 9 plots are illustrated in Figures~\ref{fig:ex6-1-1}-\ref{fig:ex6-3-3} and we could observe the following:
 
-\begin{figure}
+\begin{itemize}
+	\item For constraint 1 and the Schaffer function we have almost the same behaviour for rejection and penalty.
+	This is most certainly due to the fact that the global optimum is at coordinate $(0,0)$, whereas constraint 1 imposes a constraint, where all valid solutions lie in the middle.
+	\item For all other combinations of fitness functions and constraints the penalty method always leads to particles having smaller distance to each other.
+	This is because particles can overcome barriers with the penalty method, whereas with the rejection method particles can be ``stuck'' in some regions.
+	The same arguments also lead to fewer clusters, when using the penalty method.
+	\item It is also worth mentioning that the path length also increases for the penalty method, as particles can walk into invalid regions.
+	\item Regarding convergence to global optima we have similar behaviour for both constraint handling methods, as we used a population size of 50, which is quite high.
+	But for example for the Schaffer function and constraint 3 we have faster convergence to the global optimum for the penalty method, whereas for the rejection method particles converges slowly to a local optimum, which is not globally optimal.
+	\item Overall it can be said, that the penalty method outperforms the rejection method in nearly every aspect.
+	This can of course be the result of the choice of our fitness function and constraints, and also the particular implementation we chose.
+	But we would still prefer penalty over rejection in nearly every scenario.
+\end{itemize}
+
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex6/ex6-1-Constraint_1.pdf}
-	\label{fig:ex6-1-1}
 	\caption{Constraint handling: Schaffer function, constraint 1}
+	\label{fig:ex6-1-1}
 \end{figure}
-\begin{figure}
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex6/ex6-1-Constraint_2.pdf}
-	\label{fig:ex6-1-1}
 	\caption{Constraint handling: Schaffer function, constraint 2}
+	\label{fig:ex6-1-2}
 \end{figure}
-\begin{figure}
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex6/ex6-1-Constraint_3.pdf}
-	\label{fig:ex6-1-1}
 	\caption{Constraint handling: Schaffer function, constraint 3}
+	\label{fig:ex6-1-3}
+\end{figure}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex6/ex6-2-Constraint_1.pdf}
+	\caption{Constraint handling: Booth function, constraint 1}
+	\label{fig:ex6-2-1}
+\end{figure}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex6/ex6-2-Constraint_2.pdf}
+	\caption{Constraint handling: Booth function, constraint 2}
+	\label{fig:ex6-2-2}
+\end{figure}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex6/ex6-2-Constraint_3.pdf}
+	\caption{Constraint handling: Booth function, constraint 3}
+	\label{fig:ex6-2-3}
+\end{figure}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex6/ex6-3-Constraint_1.pdf}
+	\caption{Constraint handling: Schwefel function, constraint 1}
+	\label{fig:ex6-3-1}
+\end{figure}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex6/ex6-3-Constraint_2.pdf}
+	\caption{Constraint handling: Schwefel function, constraint 2}
+	\label{fig:ex6-3-2}
+\end{figure}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex6/ex6-3-Constraint_3.pdf}
+	\caption{Constraint handling: Schwefel function, constraint 3}
+	\label{fig:ex6-3-3}
 \end{figure}
 
+\FloatBarrier
 \section{Conclusion}
+We have seen how different parameters influence the behaviour of a PSO algorithm.
+In particular we have considered population size, particle inertia, acceleration coefficients and particle speed limits.
+We have evaluated different choices for these parameters on 3 different fitness functions.
+The main observation was that for default choices of parameters the PSO algorithm performs really well on all 3 different fitness functions.
+One would have to use really abstract parameter choices (small population sizes or suboptimal acceleration coefficients) to lead the PSO algorithm to early convergence and other undesirable behaviour.
 
-
-
-\bibliographystyle{abbrv}
-\bibliography{main}
+Furthermore we compared rejection and penalty methods for constraint handling using 3 different constraints.
+We have seen that the penalty method performs better in nearly all aspects and occasions.
+This could be due to our choice of fitness functions, constraints and particular implementation.
+But still we think that some form of penalization has to be prefered over rejection in almost all cases.
 
 
 \end{document}
