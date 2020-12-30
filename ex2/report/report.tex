@@ -258,6 +258,7 @@ Observations based on Figures~\ref{fig:ex4-1-20},\ref{fig:ex4-1-50},\ref{fig:ex4
 \begin{figure}
 	\centering
 	\includegraphics[width=0.9\textwidth]{figures/ex3/ex3-3.pdf}
+	Caption
 	\label{fig:ex3-3}
 \end{figure}
 
@@ -300,6 +301,29 @@ longer ways, slower convergence of clusters and distance to optimum as well as
 
 \end{figure}
 
+\subsection{Constraint Handling}
+Our last conducted experiment compares the two constraint handling methods, namely penalty and rejection.
+For this we try out each of the $3\cdot 3=9$ combinations of fitness function and constraints and compare constraint handling by rejection and penalty.
+The parameters for all experiments are particle-inertia$=0.33$, swarm-confidence$=1$, personal-confidence$=1$, particle-speed-limit$=10$ and population-size$=50$.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex6/ex6-1-Constraint_1.pdf}
+	\label{fig:ex6-1-1}
+	\caption{Constraint handling: Schaffer function, constraint 1}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex6/ex6-1-Constraint_2.pdf}
+	\label{fig:ex6-1-1}
+	\caption{Constraint handling: Schaffer function, constraint 2}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/ex6/ex6-1-Constraint_3.pdf}
+	\label{fig:ex6-1-1}
+	\caption{Constraint handling: Schaffer function, constraint 3}
+\end{figure}
 
 \section{Conclusion}
 
