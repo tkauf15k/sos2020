@@ -68,8 +68,12 @@ So for example for constraint 1 we set $d:=\frac{1}{14000}$ as $C(x,y)=x^2+y^2-6
 We then add these penalty values at position $(x,y)$ to the value of the patch at position $(x,y)$ if the selected contraint is violated at position $(x,y)$.
 This, of course, is only done if penalization is selected as constraint handling method.
 Due to this variant of implementation, we do not have to update anything in the \textit{update-particle-positions}, as fitness-functions at patches are already considering penalization by the selected constraint.
-\section{Experimental Setup \& Evaluation Metrics}
-In order to compare convergence behaviour, we use a fixed number of $200$ iterations, without any time limit. 
+
+
+\section{Experiments and Analysis}
+\subsection{Experimental Setup \& Evaluation Metrics}
+In order to compare the convergence behaviour, we use a fixed number of up to $200$ iterations, without any time limit. Furthermore, we disabled the premature termination criterion once the optimum is found, since this would have led to bias results in our stepwise average approach. 
+
 We use the following metrics to capture characteristics of solutions:
 \begin{itemize}
 	\item \textbf{Fitness}: a value between 0 and 1
@@ -89,10 +93,6 @@ We use the following metrics to capture characteristics of solutions:
 \end{itemize}
 
 Finally, for statistically stable results, each configuration in our experiments was executed $15$ times, and metrics where obtained by the average of those executions.
-
-
-
-\section{Experiments and Analysis}
 %\subsection{Experiment 1: Strong Personal Focus}
 %\begin{figure}
 %	\centering
@@ -128,8 +128,15 @@ Finally, for statistically stable results, each configuration in our experiments
 %
 %\end{figure}
 
-
 \subsection{Different Population Sizes}
+In the first experiment we compare the impact of the population size on the convergence behaviour. For each function, we compared three different population sizes with fixed parameters for the others. (inertia $\omega=0.33$, swarm-confidence $c_s=1$, personal-confidence $c_p=1$ and particle-speed-limit $V_{max}=10$.
+Observations:
+\begin{itemize}
+	\item Larger populations are in favour of finding the global optimum or at least converge faster. One reason for this is certainly the relatively restricted search space, where it's rather likely that a random initialization hits high quality regions right in the beginning. We conducted some small experiments with completely unsuitable parameter settings, but large populations that still obtained the global optimum in just a couple of iterations. 
+	\item For extraordinarily small populations, e.g. $P=10$, the experiments show that only for rather simply functions without a rugged landscape convergence towards the optimum can be achieved (Booth's function seems to be \emph{convexish}, although it is quadratic). 
+	\item For more complex functions, like Schaffer, those populations converge at several poor local optima around the global one, indicated by the relatively high number of different clusters and the high average distance to the optimum. Still, after $30$ iterations they seem to concentrate on a certain subspace, where they get stuck in local optima. 
+	\item Although convergence towards a suboptimal solution w.r.t to the fitness sets in rather early, the path lengths still increases, indicating stagnation behaviour. 
+\end{itemize}
 
 \begin{figure}
 	\centering
@@ -148,23 +155,22 @@ Finally, for statistically stable results, each configuration in our experiments
 \end{figure}
 
 
-
-\subsection{Inertia}
-
-\begin{figure}
-	\centering
-	\includegraphics[width=0.9\textwidth]{figures/ex3/ex3-3.pdf}
-	\label{fig:ex3-3}
-\end{figure}
-
-
-optimal solution found easily but some 
-
-longer ways, slower convergence of clusters and distance to optimum as well as 
-
-
-
 \subsection{Acceleration Coefficients}
+Based on our findings we proceeded with experiments concerning acceleration coefficients. From manual tests and the previous experiment, we know that for larger populations our functions can be optimized quite easily with standard parameters, $c_s=1$, $c_p=1$ and $V_{max}=10$, so in this experiment we turned our focus on values off the mean (i.e. $1$) and tested all four combinations for the values $0.3$ and $1.7$ for medium and larger population sizes for each of the selected functions. 
+
+Observations:
+\begin{itemize}
+	\item Our main observation from this experiment was that in the selected functions, a dominance of swarm-confidence is favourable in terms of convergence. Even for smaller populations convergence towards a high quality optimum can be obtained even below $20$ iterations.
+	\item Even further, the number of particles temporarily stuck in suboptimal local seems to be lower, indicated by our cluster metric, which in combination with the distance to the global optimum, shows a relatively smooth convergence in just $20$ iterations. 
+	\item For other configurations, on the other hand, these metrics show a different picture. First, there's a lot of fluctuations in the number of clusters, indicating that particles frequently change influencing neighbours, although eventually they still converge towards the optimum on average (but with far more particles being in many other regions in the search space). It's important to note that this is actually not necessarily a poor characteristic. For other functions, particularly with larger and potentially more rugged search spaces, we claim that such a behaviour is actually to some degree advantageous since it fosters diversity in the search (still it perfectly shows that parameters highly depend on the instance).
+	\item For the inverse dominance relationship between swarm and personal confidence a rather poor behaviour can be observed. First, this configuration lacks in convergence towards the optimum w.r.t to fitness, but also the other metrics show poor behaviour. Throughout the entire search, the number of distinct clusters remains relatively high, indicating that particles likely do not profit from each other, but rather seem to be stuck in intensifications phases (the path length is still relatively high, indicating that particles still make significant steps but without any real progress in terms of fitness, also shown by the high average distance to the optimum). 
+	\item Figure~\ref{fig:ex4-example} shows two representative examples of this behaviour. On the one hand, ~\ref{fig:ex4-example-a} shows almost arbitrarily scattered particles in the search space after $100$ iterations, while in ~\ref{fig:ex4-example-b} all particles were directly guided towards the optimum. 
+	\item Again, it can be observed that Booth's function is among the easier ones, where even poor configurations obtain the optimum relatively fast. 
+\end{itemize}
+
+
+
+
 \begin{figure}
 	\centering
 	\includegraphics[width=1\textwidth]{figures/ex4/ex4-1-20.pdf}
@@ -201,19 +207,33 @@ longer ways, slower convergence of clusters and distance to optimum as well as
 \centering
 \includegraphics[width=0.75\textwidth]{figures/ex4/ex4-03-17-f3.png}
 \subcaption{$c_s=0.3$, $c_p=1.7$}
+\label{fig:ex4-example-a}
 \end{subfigure}
 \begin{subfigure}[c]{0.5\textwidth}
 \centering
 \includegraphics[width=0.75\textwidth]{figures/ex4/ex4-17-03-f3.png}
 \subcaption{$c_s=1.7$, $c_p=0.3$}
+\label{fig:ex4-example-b}
 \end{subfigure}
 
 \caption{Comparison of representative solutions for fitness function $1$ ($P=100$) and $3$ ($P=20$).}
+\label{fig:ex4-example}
 
 \end{figure}
 
 
+\subsection{Inertia}
 
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\textwidth]{figures/ex3/ex3-3.pdf}
+	\label{fig:ex3-3}
+\end{figure}
+
+
+optimal solution found easily but some 
+
+longer ways, slower convergence of clusters and distance to optimum as well as 
 
 \subsection{Speed Limit}
 \begin{figure}

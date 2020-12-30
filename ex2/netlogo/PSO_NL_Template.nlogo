@@ -264,10 +264,11 @@ to iterate
       set optimum-found True ;stop
     ]
 
+  if stop-on-optimum and optimum-found = True
+  [stop]
+
   if iterations >= max-iterations
-  [
-   stop
-  ]
+  [stop ]
 
   tick
 
@@ -632,7 +633,7 @@ population-size
 population-size
 1
 100
-50.0
+10.0
 1
 1
 NIL
@@ -647,7 +648,7 @@ personal-confidence
 personal-confidence
 0
 2
-1.0
+0.3
 0.1
 1
 NIL
@@ -662,7 +663,7 @@ swarm-confidence
 swarm-confidence
 0
 2
-1.0
+1.7
 0.1
 1
 NIL
@@ -1043,7 +1044,7 @@ INPUTBOX
 270
 570
 max-iterations
-50.0
+100.0
 1
 0
 Number
@@ -1065,6 +1066,17 @@ false
 "" ""
 PENS
 "default" 1.0 0 -8053223 true "" "plot mean-path-length"
+
+SWITCH
+315
+575
+462
+608
+stop-on-optimum
+stop-on-optimum
+1
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -1926,7 +1938,7 @@ export-world (word "H:/sos-ex-3/init/run-" particle-inertia "-" constraint_handl
       <value value="&quot;Constraint 3&quot;"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="max-iterations">
-      <value value="200"/>
+      <value value="100"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="Constraints">
       <value value="false"/>
@@ -1943,6 +1955,142 @@ export-world (word "H:/sos-ex-3/init/run-" particle-inertia "-" constraint_handl
       <value value="30"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="particle-speed-limit">
+      <value value="20"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="personal-confidence">
+      <value value="1"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="confidence-comparison" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup
+export-world (word "H:/sos-ex-4/init/run-" particle-inertia "-" constraint_handling_method "-" Constraint "-" swarm-confidence "-" fitness_function "-" Constraints "-" population-size "-" particle-speed-limit "-" personal-confidence "-" behaviorspace-experiment-name "-" behaviorspace-run-number ".txt")</setup>
+    <go>iterate</go>
+    <final>export-world (word "H:/sos-ex-4/results/run-" particle-inertia "-" swarm-confidence "-" fitness_function "-" population-size "-" particle-speed-limit "-" personal-confidence "-" behaviorspace-experiment-name "-" behaviorspace-run-number "-" ".txt")</final>
+    <exitCondition>iterations &gt;= max-iterations</exitCondition>
+    <metric>global-best-val</metric>
+    <metric>optimum-found</metric>
+    <metric>num-clusters</metric>
+    <metric>avg-distance-to-optimum</metric>
+    <metric>min-distance-to-optimum</metric>
+    <metric>avg-neighbor-count</metric>
+    <metric>lonely-turtles</metric>
+    <metric>avg-distance-of-turtles</metric>
+    <metric>violations</metric>
+    <metric>iterations</metric>
+    <metric>mean-path-length</metric>
+    <enumeratedValueSet variable="trails-mode">
+      <value value="&quot;None&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-inertia">
+      <value value="0.33"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="path-to-load">
+      <value value="&quot;filename.txt&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="swarm-confidence">
+      <value value="0.3"/>
+      <value value="1.7"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="highlight-mode">
+      <value value="&quot;Best found&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="strict_reject">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="constraint_handling_method">
+      <value value="&quot;Penalty Method&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Constraint">
+      <value value="&quot;Constraint 3&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="max-iterations">
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Constraints">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="fitness_function">
+      <value value="&quot;Fitness function 1&quot;"/>
+      <value value="&quot;Fitness function 2&quot;"/>
+      <value value="&quot;Fitness function 3&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="path-to-save">
+      <value value="&quot;filename.txt&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="population-size">
+      <value value="20"/>
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-speed-limit">
+      <value value="10"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="personal-confidence">
+      <value value="0.3"/>
+      <value value="1.7"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="particle-speed-limit" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup
+export-world (word "H:/sos-ex-5/init/run-" particle-inertia "-" constraint_handling_method "-" Constraint "-" swarm-confidence "-" fitness_function "-" Constraints "-" population-size "-" particle-speed-limit "-" personal-confidence "-" behaviorspace-experiment-name "-" behaviorspace-run-number ".txt")</setup>
+    <go>iterate</go>
+    <final>export-world (word "H:/sos-ex-5/results/run-" particle-inertia "-" swarm-confidence "-" fitness_function "-" population-size "-" particle-speed-limit "-" personal-confidence "-" behaviorspace-experiment-name "-" behaviorspace-run-number "-" ".txt")</final>
+    <exitCondition>iterations &gt;= max-iterations</exitCondition>
+    <metric>global-best-val</metric>
+    <metric>optimum-found</metric>
+    <metric>num-clusters</metric>
+    <metric>avg-distance-to-optimum</metric>
+    <metric>min-distance-to-optimum</metric>
+    <metric>avg-neighbor-count</metric>
+    <metric>lonely-turtles</metric>
+    <metric>avg-distance-of-turtles</metric>
+    <metric>violations</metric>
+    <metric>iterations</metric>
+    <metric>mean-path-length</metric>
+    <enumeratedValueSet variable="trails-mode">
+      <value value="&quot;None&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-inertia">
+      <value value="0.33"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="path-to-load">
+      <value value="&quot;filename.txt&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="swarm-confidence">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="highlight-mode">
+      <value value="&quot;Best found&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="strict_reject">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="constraint_handling_method">
+      <value value="&quot;Penalty Method&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Constraint">
+      <value value="&quot;Constraint 3&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="max-iterations">
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Constraints">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="fitness_function">
+      <value value="&quot;Fitness function 1&quot;"/>
+      <value value="&quot;Fitness function 2&quot;"/>
+      <value value="&quot;Fitness function 3&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="path-to-save">
+      <value value="&quot;filename.txt&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="population-size">
+      <value value="20"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="particle-speed-limit">
+      <value value="3"/>
+      <value value="7"/>
+      <value value="10"/>
       <value value="20"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="personal-confidence">
