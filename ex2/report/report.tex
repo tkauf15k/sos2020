@@ -22,11 +22,11 @@
 \maketitle
 
 \begin{abstract}
-    In the second exercise of the lecture Self Organizing Systems we are implementing a simple Particle Swarm Optimization (PSO) algorithm and experimenting with different parameters, fitness functions, constraints and constraint handling method.
+    In the second exercise of the lecture Self Organizing Systems we are implementing a simple Particle Swarm Optimization (PSO) algorithm and experimenting with different parameters, fitness functions, constraints and constraint handling methods.
     More specifically, we are given a PSO framework in NetLogo for optimizing functions $f$ from $\mathbb{R}^2$ to $\mathbb{R}$.
-    Our task is to implement 3 different fitness functions, 3 different constraints and a constraint handling method using penalization.
+    Our task is to implement 3 different fitness functions, 3 different constraints and constraint handling methods using penalization or solution rejection.
     Furthermore, we are to conduct several experiments, to observe different effects of parameters on the performance of the convergence behaviour of the PSO algorithm.
-    Here we are inspecting \textit{population size}, \textit{particle speed limit}, \textit{particle inertia} and the difference between constraint handling using penalization and rejection.
+    Here we are inspecting \textit{population size}, \textit{particle speed limit}, \textit{particle inertia}, both \textit{acceleration coefficients} and the difference between constraint handling using penalization and rejection.
 \end{abstract}
 
 \section{Implementation}
@@ -97,7 +97,7 @@ We use the following metrics to capture characteristics of solutions:
 	
 	\item \textbf{Average Distance to the Optimal Solution}: Should be monotonically decreasing in convex functions. However, in rugged landscapes with several nearly optimal solutions may not necessarily decrease to $\approx 0$.
 	\item \textbf{Average Distance among Particles}: As a measure for the distribution of particles in the search space. 
-	Thus, in the beginning it is relatively high, as particles are randomly scattered among the search space, but it should decrease continuously as particles strive towards the (single or few) global optima. 
+	Thus, in the beginning it is relatively high, as particles are randomly scattered among the search space, but should decrease continuously as particles strive towards the (single or few) global optima. 
 	In case this value is high, a disconnected and highly constrained search may be indicated. 
 	\item \textbf{Average Path Length}: Average length of the paths of each particle throughout the entire execution.
 		
