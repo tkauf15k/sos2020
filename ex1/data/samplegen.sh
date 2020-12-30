@@ -1,0 +1,1 @@
+for i in 10 20 50 100 ; do ./splitter.sh $i human_data.fasta > $i/human_data_$i.fasta; done
