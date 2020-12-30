@@ -1,0 +1,2 @@
+echo "runnumber;trailsmode;particleinertia;swarmconfidence;fitnessfunction;Constraints;strictreject;constrainthandlingmethod;constrainthandlingmethod;"populationsize ";particlespeedlimit;personalconfidence;step;globalbestval;optimumfound;numclusters;avgdistancetooptimum;mindistancetooptimum;avgneighborcount;"lonelyturtles ";avgdistanceofturtles;violations;iterations;meanpathlength" > $2
+cat $1 | tail -n +8 | tr -d \" |  sed -e "s/,/;/g" >> $2
