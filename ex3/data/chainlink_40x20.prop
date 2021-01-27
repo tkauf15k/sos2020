@@ -1,0 +1,18 @@
+#chainlink_40x20 prop file
+# somtoolbox [GrowingSOM, --numberWinners, 300, --cpus, 12, 
+#   C:\Users\Alex\Dropbox\LC_SOS\sos2020\ex3\data\chainlink_40x20.prop]
+#
+#Wed Jan 27 16:56:29 CET 2021
+workingDirectory=C\:\\Users\\Alex\\Dropbox\\LC_SOS\\sos2020\\ex3\\data
+tau=1.0
+templateFileName=C\:\\Users\\Alex\\Dropbox\\LC_SOS\\sos2020\\ex3\\data\\chainlink_template.vec
+ySize=20
+learnRate=0.7
+randomSeed=7
+numIterations=150000
+namePrefix=chainlink_40x20
+vectorFileName=C\:\\Users\\Alex\\Dropbox\\LC_SOS\\sos2020\\ex3\\data\\chainlink_input.vec
+sparseData=no
+outputDirectory=C\:\\Users\\Alex\\Dropbox\\LC_SOS\\sos2020\\ex3\\data
+xSize=40
+isNormalized=no

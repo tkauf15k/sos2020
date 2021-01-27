@@ -1,0 +1,18 @@
+#10clusters_100x60 prop file
+# somtoolbox [GrowingSOM, --numberWinners, 300, --cpus, 12, 
+#   C:\Users\Alex\Dropbox\LC_SOS\sos2020\ex3\data\10clusters_100x60.prop]
+#
+#Tue Jan 26 22:12:03 CET 2021
+workingDirectory=C\:\\Users\\Alex\\Dropbox\\LC_SOS\\sos2020\\ex3\\data
+tau=1.0
+templateFileName=C\:\\Users\\Alex\\Dropbox\\LC_SOS\\sos2020\\ex3\\data\\10clusters_template.vec
+ySize=60
+learnRate=0.7
+randomSeed=50
+numIterations=100000
+namePrefix=10clusters_100x60
+vectorFileName=C\:\\Users\\Alex\\Dropbox\\LC_SOS\\sos2020\\ex3\\data\\10clusters_input.vec
+sparseData=yes
+outputDirectory=C\:\\Users\\Alex\\Dropbox\\LC_SOS\\sos2020\\ex3\\data
+xSize=100
+isNormalized=yes

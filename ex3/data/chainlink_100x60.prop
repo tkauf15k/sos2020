@@ -1,0 +1,18 @@
+#chainlink_100x60 prop file
+# somtoolbox [GrowingSOM, --numberWinners, 300, --cpus, 12, 
+#   C:\Users\Alex\Dropbox\LC_SOS\sos2020\ex3\data\chainlink_100x60.prop]
+#
+#Wed Jan 27 16:56:55 CET 2021
+workingDirectory=C\:\\Users\\Alex\\Dropbox\\LC_SOS\\sos2020\\ex3\\data
+tau=1.0
+templateFileName=C\:\\Users\\Alex\\Dropbox\\LC_SOS\\sos2020\\ex3\\data\\chainlink_template.vec
+ySize=60
+learnRate=0.7
+randomSeed=7
+numIterations=150000
+namePrefix=chainlink_100x60
+vectorFileName=C\:\\Users\\Alex\\Dropbox\\LC_SOS\\sos2020\\ex3\\data\\chainlink_input.vec
+sparseData=no
+outputDirectory=C\:\\Users\\Alex\\Dropbox\\LC_SOS\\sos2020\\ex3\\data
+xSize=100
+isNormalized=no
