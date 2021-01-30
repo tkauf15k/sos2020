@@ -33,7 +33,6 @@ lines = set()
 for i in range(0, num_nodes):
     my_coords = (assignment_x[i], assignment_y[i])
 
-    my_partners = tmp5[:, i]
     my_partners_filtered = np.where(tmp5[:, i] > -1)
 
     if len(my_partners_filtered[0]) == 0:
