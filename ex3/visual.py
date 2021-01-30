@@ -4,6 +4,9 @@ import pandas as pd
 import numpy as np
 import gzip
 import sklearn.metrics
+import pandas as pd
+import minisom as som
+from sklearn import datasets, preprocessing
 
 
 class SOMToolBox_Parse:
@@ -141,14 +144,14 @@ class SomViz:
             c = heapq.nsmallest(factor, range(len(dist)), key=dist.__getitem__)
             if (sdh_type == 1):
                 for j in range(0, factor):  sdh_m[c[j]] += (
-                                                                       factor - j) / cs  # normalized
+                                                                   factor - j) / cs  # normalized
             if (sdh_type == 2):
                 for j in range(0, factor): sdh_m[c[j]] += 1.0 / dist[
                     c[j]]  # based on distance
             if (sdh_type == 3):
                 dmin = min(dist)
                 for j in range(0, factor): sdh_m[c[j]] += 1.0 - (
-                            dist[c[j]] - dmin) / (max(dist) - dmin)
+                        dist[c[j]] - dmin) / (max(dist) - dmin)
 
         if som_map == None:
             return self.plot(np.array(sdh_m).reshape(-1, self.n), color=color,
@@ -242,8 +245,8 @@ class SomViz:
                              title_x=0.5, ))
 
     # helper function for drawing from som unit (x1,y1) to (x2,y2)
-    def draw_line(self, x1, y1, x2, y2, figure):
-        figure.add_scatter(x=[x1, x2], y=[y1, y2], line_color="red",
+    def draw_line(self, x1, y1, x2, y2, figure, color='red'):
+        figure.add_scatter(x=[x1, x2], y=[y1, y2], line_color=color,
                            mode='lines', showlegend=False)
 
     # helper function for getting corrected (x,y) indices for weight array indexes
@@ -266,7 +269,7 @@ class SomViz:
                                     neighbor_weights).mean()
 
         # Create U-matrix plot
-        SCALE = 10
+        SCALE = 20
         layout = go.Layout(width=self.n * SCALE, height=self.m * SCALE,
                            title=title, title_x=0.5, )
         figure = go.FigureWidget(
@@ -291,7 +294,7 @@ class SomViz:
                                     neighbor_weights).mean()
 
         # Create U-matrix plot
-        SCALE = 10
+        SCALE = 20
         layout = go.Layout(width=self.n * SCALE, height=self.m * SCALE,
                            title=title, title_x=0.5, )
         figure = go.FigureWidget(
@@ -315,7 +318,7 @@ class SomViz:
                     np.sqrt(np.sum(np.power(self.weights - v, 2), axis=1)))
 
             nearest_dist, nearest_ind = tree.query([v], k=(
-                        k + 1))  # k+1 because we also get the query point
+                    k + 1))  # k+1 because we also get the query point
             inds = nearest_ind[0][:]
             for ind in inds:
                 if ind != ind_orig:
@@ -338,7 +341,7 @@ class SomViz:
 
     def neighbourhood_radius(self, idata, radius=0.2, color="Viridis",
                              interp=False,
-                             title=""):
+                             title="", highlight_longest_n: int = None):
 
         figure = self.prepare_um_figure(color, interp, title)
 
@@ -397,50 +400,80 @@ class SomViz:
             for n in neighbors:
                 lines.add((my_coords, n))
 
-        for (x1, y1), (x2, y2) in lines:
+        longest_lines = []
+        if highlight_longest_n is not None:
+            line_lengths = [(((x1, y1), (x2, y2)), np.linalg.norm(
+                np.array((x1, y1) - np.array((x2, y2))))) for (x1, y1), (x2, y2)
+                            in lines]
+            longest_lines = [x[0] for x in
+                             sorted(line_lengths, key=lambda x: x[1],
+                                    reverse=True)[0:highlight_longest_n]]
+
+        for line in lines:
+            if highlight_longest_n is not None and line in longest_lines:
+                continue
+            (x1, y1), (x2, y2) = line
             self.draw_line(x1, y1, x2, y2, figure)
+
+        if highlight_longest_n is not None:
+            for line in longest_lines:
+                (x1, y1), (x2, y2) = line
+                self.draw_line(x1, y1, x2, y2, figure, color='black')
 
         return figure
 
 
 # %%
 
-# try reference neighbourhood graph
-import pandas as pd
-import minisom as som
-from sklearn import datasets, preprocessing
-
 # interp: False, 'best', 'fast',
 # color = 'viridis': https://plotly.com/python/builtin-colorscales/
-
 
 ##########################################
 ######## read from SOMToolBox ############
 ##########################################
-trainedmap = SOMToolBox_Parse('data/chainlink_input.vec')
-idata, idim, idata_x, idata_y = trainedmap.read_weight_file()
 
-smap = SOMToolBox_Parse('data/chainlink_100x60.wgt.gz')
-smap, sdim, smap_x, smap_y = smap.read_weight_file()
+def chainlink():
+    trainedmap = SOMToolBox_Parse('data/chainlink_input.vec')
+    idata, idim, idata_x, idata_y = trainedmap.read_weight_file()
 
-# Visualizaton
-viz_SOMToolBox = SomViz(smap.values.reshape(-1, sdim), smap_y, smap_x)
-um = viz_SOMToolBox.neighbourhood_knn(k = 5, idata = idata, color='viridis', interp=False, title='U-matrix SOMToolBox')
-um.show()
+    smap = SOMToolBox_Parse('data/chainlink_40x20.wgt.gz')
+    smap, sdim, smap_x, smap_y = smap.read_weight_file()
 
-um = viz_SOMToolBox.neighbourhood_radius(radius=0.2, idata=idata,
-                                         color='viridis', interp=False,
-                                         title='U-matrix SOMToolBox 222')
-um.show()
+    # Visualizaton
+    viz_SOMToolBox = SomViz(smap.values.reshape(-1, sdim), smap_y, smap_x)
+    # um = viz_SOMToolBox.neighbourhood_knn(k = 5, idata = idata, color='viridis', interp=False, title='U-matrix SOMToolBox')
+    # um.show()
 
-exit(0)
+    um = viz_SOMToolBox.neighbourhood_radius(radius=0.3, idata=idata,
+                                             color='viridis', interp=False,
+                                             title='U-matrix SOMToolBox 222',
+                                             highlight_longest_n=20)
+    um.show()
 
 
-# %%
+def tencluster():
+    trainedmap = SOMToolBox_Parse('data/10clusters_input.vec')
+    idata, idim, idata_x, idata_y = trainedmap.read_weight_file()
 
-import pandas as pd
-import minisom as som
-from sklearn import datasets, preprocessing
+    smap = SOMToolBox_Parse('data/10clusters_40x20.wgt.gz')
+    smap, sdim, smap_x, smap_y = smap.read_weight_file()
+
+    # Visualizaton
+    viz_SOMToolBox = SomViz(smap.values.reshape(-1, sdim), smap_y, smap_x)
+
+    # um = viz_SOMToolBox.neighbourhood_knn(k = 5, idata = idata, color='viridis', interp=False, title='U-matrix SOMToolBox')
+
+    # todo: increase from radius 0.1 ... 3, then we can see the scarce cluster
+    um = viz_SOMToolBox.neighbourhood_radius(radius=10, idata=idata,
+                                             color='viridis', interp=False,
+                                             title='U-matrix SOMToolBox 222',
+                                             highlight_longest_n=20)
+
+    um.show()
+
+
+tencluster()
+
 
 # interp: False, 'best', 'fast',
 # color = 'viridis': https://plotly.com/python/builtin-colorscales/
@@ -449,38 +482,51 @@ from sklearn import datasets, preprocessing
 #############################
 ######## miniSOM ############1/0
 #############################
-m = 10
-n = 10
+def miniSom():
+    m = 10
+    n = 10
 
-# Pre-processing
-iris = datasets.load_iris().data
-min_max_scaler = preprocessing.MinMaxScaler()
-iris = min_max_scaler.fit_transform(iris)
+    # Pre-processing
+    iris = datasets.load_iris().data
+    min_max_scaler = preprocessing.MinMaxScaler()
+    iris = min_max_scaler.fit_transform(iris)
 
-# Train
-s = som.MiniSom(m, n, iris.shape[1], sigma=0.8, learning_rate=0.7)
-s.train_random(iris, 10000, verbose=False)
+    # Train
+    s = som.MiniSom(m, n, iris.shape[1], sigma=0.8, learning_rate=0.7)
+    s.train_random(iris, 10000, verbose=False)
 
-# Visualizaton
-viz_miniSOM = SomViz(s._weights.reshape(-1, 4), m, n)
-um1 = viz_miniSOM.umatrix(color='magma', interp='best',
-                          title='U-matrix miniSOM')
+    # Visualizaton
+    viz_miniSOM = SomViz(s._weights.reshape(-1, 4), m, n)
+    um1 = viz_miniSOM.umatrix(color='magma', interp='best',
+                              title='U-matrix miniSOM')
+
+    um1.show()
+
+    return um1
+
 
 ##########################################
 ######## read from SOMToolBox ############
 ##########################################
-trainedmap = SOMToolBox_Parse('iris.vec')
-idata, idim, idata_x, idata_y = trainedmap.read_weight_file()
 
-smap = SOMToolBox_Parse('iris.wgt.gz')
-smap, sdim, smap_x, smap_y = smap.read_weight_file()
+def iris():
+    trainedmap = SOMToolBox_Parse('iris.vec')
+    idata, idim, idata_x, idata_y = trainedmap.read_weight_file()
 
-# Visualizaton
-viz_SOMToolBox = SomViz(smap.values.reshape(-1, sdim), smap_y, smap_x)
-um2 = viz_SOMToolBox.umatrix(color='viridis', interp=False, title='U-matrix SOMToolBox')
-display(HBox([um1, um2]))
+    smap = SOMToolBox_Parse('iris.wgt.gz')
+    smap, sdim, smap_x, smap_y = smap.read_weight_file()
 
+    # Visualizaton
+    viz_SOMToolBox = SomViz(smap.values.reshape(-1, sdim), smap_y, smap_x)
+    # um2 = viz_SOMToolBox.umatrix(color='viridis', interp='fast', title='U-matrix SOMToolBox')
+    # um2.show()
+    #
+    # um = viz_SOMToolBox.neighbourhood_knn(k=5, idata=idata, color='viridis',
+    #                                       interp=False,
+    #                                       title='U-matrix SOMToolBox')
+    # um.show()
 
-# %%
-
-
+    um = viz_SOMToolBox.neighbourhood_radius(radius=0.3, idata=idata,
+                                             color='viridis', interp=False,
+                                             title='U-matrix SOMToolBox 222')
+    um.show()
