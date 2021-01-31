@@ -1,1 +1,0 @@
-somtoolbox.bat SOMViewer -w C:\Users\Alex\Dropbox\LC_SOS\sos2020\ex3\data\10clusters_100x60.wgt.gz -u C:\Users\Alex\Dropbox\LC_SOS\sos2020\ex3\data\10clusters_100x60.unit.gz
