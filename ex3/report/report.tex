@@ -17,7 +17,7 @@
 \usepackage{amsmath,amssymb}
 \usepackage{subcaption}
 \usepackage[section]{placeins}
-
+\usepackage{hyperref}
 \begin{document}
 \maketitle
 
@@ -26,6 +26,7 @@
 The implementation is described directly in the jupyter notebook.
 We implemented the k-NN-based and the radius-based neighborhood graphs.
 Both implementations can be found in the \textit{SomViz} class under the methods \textit{neighbourhood\_knn} and \textit{neighbourhood\_radius}.
+The implementation is published here: \href{https://github.com/tkauf15k/sos2020}{https://github.com/tkauf15k/sos2020}.
 
 \paragraph*{Adapting Parameters}
 Adapting parameters is as easy as changing the parameter \textit{k} for the function \textit{neighbourhood\_knn} and the parameter \textit{radius} for \textit{neighbourhood\_radius}.
@@ -114,7 +115,7 @@ Obviously both visualisations can be used to identify density information and to
 In Figure~\ref{fig:10clustersknn} and Figure~\ref{fig:10clustersradius} we can see the k-NN based and radius-based neighborhood graphs for the 10 clusters dataset projected onto the U-matrix visualisation.
 While the k-NN based neighborhood graph detects all 10 clusters, the radius-based neighborhood does not detect the clusters with big standard deviation to the right.
 Both visualisations clearly show density information:
-The k-NN based neighborhood graph detects all 10 clusters, while the radius-based neighborhood graph detects how \textit{dense} these clusters themselfs are.
+The k-NN based neighborhood graph detects all 10 clusters, while the radius-based neighborhood graph detects how \textit{dense} these clusters themselves are.
 
 \section{Comparison with SOM Toolbox}
 \begin{figure}[t]
@@ -181,6 +182,7 @@ In Figures~\ref{fig:chainlinkknncomparison}-\ref{fig:10clustersradiuscomparison}
 Clearly they are identical, which means our implementation is correct.
 
 \section{Conclusion}
-Having the weight and input vector files, generating the neighborhood graph is easy when using for example KD-trees for computing nearest neighbors.
+Having the weight and input vector files, generating the neighborhood graph is easy when using for example KD-trees for computing nearest neighbors. Even more, we showed that the visualizations allow to identify different characteristics of a dataset, like local densities (i.e. clusters), cardinality and density of clusters as well as topology violations.
+
 \end{document}
   
