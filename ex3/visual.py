@@ -7,6 +7,9 @@ import sklearn.metrics
 import pandas as pd
 import minisom as som
 from sklearn import datasets, preprocessing
+import matplotlib.pyplot as plt
+import seaborn as sbs
+from matplotlib.collections import LineCollection
 
 
 class SOMToolBox_Parse:
@@ -75,6 +78,7 @@ from scipy.spatial import distance_matrix, distance
 from ipywidgets import Layout, HBox, Box, widgets, interact
 import plotly.graph_objects as go
 from sklearn.neighbors import KDTree
+from scipy.ndimage.filters import gaussian_filter
 
 from IPython.core.display import display, HTML
 
@@ -268,6 +272,16 @@ class SomViz:
             um[i] = distance_matrix(np.expand_dims(self.weights[i], 0),
                                     neighbor_weights).mean()
 
+        fig, ax1 = plt.subplots(figsize=(15, 10))
+        dat = um.reshape(self.m, self.n)
+
+        if interp is not False:
+            dat = gaussian_filter(dat, sigma=0.5)
+
+        sbs.heatmap(data=dat, ax=ax1, cmap=color, cbar=False)
+
+        return fig
+
         # Create U-matrix plot
         SCALE = 20
         layout = go.Layout(width=self.n * SCALE, height=self.m * SCALE,
@@ -409,16 +423,27 @@ class SomViz:
                              sorted(line_lengths, key=lambda x: x[1],
                                     reverse=True)[0:highlight_longest_n]]
 
-        for line in lines:
-            if highlight_longest_n is not None and line in longest_lines:
-                continue
-            (x1, y1), (x2, y2) = line
-            self.draw_line(x1, y1, x2, y2, figure)
+        # for line in lines:
+        #     if highlight_longest_n is not None and line in longest_lines:
+        #         continue
+        #     (x1, y1), (x2, y2) = line
+        #     self.draw_line(x1, y1, x2, y2, figure)
+        #
+        # if highlight_longest_n is not None:
+        #     for line in longest_lines:
+        #         (x1, y1), (x2, y2) = line
+        #         self.draw_line(x1, y1, x2, y2, figure, color='black')
 
-        if highlight_longest_n is not None:
-            for line in longest_lines:
-                (x1, y1), (x2, y2) = line
-                self.draw_line(x1, y1, x2, y2, figure, color='black')
+        if highlight_longest_n is None:
+            lc = LineCollection([l for l in lines], color="red", lw=2)
+            plt.gca().add_collection(lc)
+        else:
+            lc = LineCollection([l for l in lines if l not in longest_lines],
+                                color="red", lw=2)
+            lc2 = LineCollection([l for l in lines if l in longest_lines],
+                                 color="black", lw=3)
+            plt.gca().add_collection(lc)
+            plt.gca().add_collection(lc2)
 
         return figure
 
@@ -436,7 +461,7 @@ def chainlink():
     trainedmap = SOMToolBox_Parse('data/chainlink_input.vec')
     idata, idim, idata_x, idata_y = trainedmap.read_weight_file()
 
-    smap = SOMToolBox_Parse('data/chainlink_40x20.wgt.gz')
+    smap = SOMToolBox_Parse('data/chainlink_100x60.wgt.gz')
     smap, sdim, smap_x, smap_y = smap.read_weight_file()
 
     # Visualizaton
@@ -444,11 +469,13 @@ def chainlink():
     # um = viz_SOMToolBox.neighbourhood_knn(k = 5, idata = idata, color='viridis', interp=False, title='U-matrix SOMToolBox')
     # um.show()
 
-    um = viz_SOMToolBox.neighbourhood_radius(radius=0.3, idata=idata,
+    um = viz_SOMToolBox.neighbourhood_radius(radius=0.1, idata=idata,
                                              color='viridis', interp=False,
                                              title='U-matrix SOMToolBox 222',
-                                             highlight_longest_n=20)
+                                             highlight_longest_n=None)
     um.show()
+
+chainlink()
 
 
 def tencluster():
@@ -464,15 +491,15 @@ def tencluster():
     # um = viz_SOMToolBox.neighbourhood_knn(k = 5, idata = idata, color='viridis', interp=False, title='U-matrix SOMToolBox')
 
     # todo: increase from radius 0.1 ... 3, then we can see the scarce cluster
-    um = viz_SOMToolBox.neighbourhood_radius(radius=10, idata=idata,
-                                             color='viridis', interp=False,
+    um = viz_SOMToolBox.neighbourhood_radius(radius=0.01, idata=idata,
+                                             color='viridis', interp=True,
                                              title='U-matrix SOMToolBox 222',
-                                             highlight_longest_n=20)
+                                             highlight_longest_n=10)
 
     um.show()
 
 
-tencluster()
+# tencluster()
 
 
 # interp: False, 'best', 'fast',
